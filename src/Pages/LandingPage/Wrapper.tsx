@@ -27,7 +27,7 @@ const Wrapper = (props: WrapperProps) => {
                 observer.disconnect()
             }
         }, {
-            threshold: 0.29
+            threshold: 0.2
         })
         if (ref.current) observer.observe(ref.current);
     }, [])
