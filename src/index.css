@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { 
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --page-max-width: 1260px;
+  --page-gutter: 1.5rem;
+  --md-page-gutter: 2.5rem;
+  --section-spacing: 3.5rem;
+  --md-section-spacing: 5rem;
+  --lg-section-spacing: 7.5rem;
+
+  /* --sm-num-grid-columns: 4;
+  --md-num-grid-columns: 8;
+  --lg-num-grid-columns: 12; */
+
+  --rang-not-so-black: #23272a;
+  --rang-primary-hero: #404eed;
+  --rang-text-link: #00b0f4;
+  --rang-off-white: #f6f6f6;
+  --rang-brand: #5865f2;
+}
+
+@font-face {
+  font-family: 'gg sans';
+  src: url('./assets/fonts/ggsansNormal.ttf') format('truetype');
+  font-weight: 400;  
+  font-style: normal;
+}
+@font-face {
+  font-family: 'gg sans';
+  src: url('./assets/fonts/ggsansMedium.ttf') format('truetype');
+  font-weight: 500;  
+  font-style: normal;
+}
+@font-face {
+  font-family: 'gg sans';
+  src: url('./assets/fonts/ggsansSemibold.ttf') format('truetype');
+  font-weight: 600;  
+  font-style: normal;
+}
+@font-face {
+  font-family: 'gg sans';
+  src: url('./assets/fonts/ggsansBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'gg sans';
+  src: url('./assets/fonts/ggsansExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ginto Nord';
+  src: local('Ginto Nord'), url(./assets/fonts/GintoNord.woff2);
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'gg sans';
+  font-weight: normal;
+  line-height: 1.15;
+}
+
+/*------------ Fonts ------------*/
+
+.ff-ginto {
+  font-family: 'Ginto Nord';
+}
+
+.fs-hero-heading-on-sm-device {
+  font-size:clamp(24px,5vw,44px);
+}
+
+.fs-hero-subtitle-on-sm-device {
+  font-size:clamp(16px,2vw,20px);
+}
+
+.fs-body-heading {
+  font-size:clamp(20px,4vw,40px);
+}
+
+
+/*------------ Other------------*/
+
+.fade-up-mobile-menu {
+  background: linear-gradient(hsla(0,0%,100%,0),#fff 25%);
+}
+
+.chota {
+  display: none;
+}
+.bada {
+  display: block;
+}
+@media screen and (max-width: 410px) {
+  .chota {
+    display: block;
+  }
+  .bada {
+    display: none;
+  }
+}
