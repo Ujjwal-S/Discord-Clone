@@ -16,15 +16,14 @@
   --md-section-spacing: 5rem;
   --lg-section-spacing: 7.5rem;
 
-  /* --sm-num-grid-columns: 4;
-  --md-num-grid-columns: 8;
-  --lg-num-grid-columns: 12; */
-
   --rang-not-so-black: #23272a;
   --rang-primary-hero: #404eed;
   --rang-text-link: #00b0f4;
   --rang-off-white: #f6f6f6;
   --rang-brand: #5865f2;
+  --rang-primary-dark: #36393f;
+
+  --text-gray: #b9bbbe;
 }
 
 @font-face {
@@ -92,7 +91,7 @@ body {
 }
 
 
-/*------------ Other------------*/
+/*------------ Other ------------*/
 
 .fade-up-mobile-menu {
   background: linear-gradient(hsla(0,0%,100%,0),#fff 25%);
@@ -110,5 +109,72 @@ body {
   }
   .bada {
     display: none;
+  }
+}
+
+
+
+/*------------ Login Page ------------*/
+
+.form-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+.qr-code-login{
+  display: none;
+}
+@media screen and (max-width: 485px) {
+  .form-container{
+    font-size: 14px;
+    padding: 20px 16px;
+  }
+  .discord-logo {
+    display: block;
+  }
+  .other-button {
+    order: 1;
+    grid-column: span 3;
+  }
+  .google-button {
+    order: 2;
+    grid-column: span 3;
+  }
+}
+@media screen and (min-width: 485px) {
+  .form-container{
+    width: 480px;
+    height: unset;
+    border-radius: 5px;
+  }
+}
+@media screen and (min-width: 830px) {
+  .form-container{
+    width: 784px;
+    height: unset;
+    border-radius: 5px;
+  }
+  .qr-code-login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+
+/*------------ Register Page ------------*/
+
+.register-form-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  padding: 20px 16px;
+}
+@media screen and (min-width: 490px) {
+  .register-form-container {
+    width: 480px;
+    height: fit-content;
+    border-radius: 5px;
+    padding: 32px;
   }
 }

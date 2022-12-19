@@ -2,6 +2,7 @@ type ButtonProps = {
     size: "sm" | "lg",
     color: "purple" | "white" | "dark",
     width?: "full" | "contain",
+    onClick?: () => any,
     children: React.ReactNode
 }
 
@@ -46,6 +47,10 @@ const Button = (props:ButtonProps) => {
         }else{
             buttonStyles += " w-fit";
         }
+
+    if (props.onClick) {
+        return <button className={buttonStyles} onClick={props.onClick} >{props.children}</button>
+    }
 
     return <button className={buttonStyles} >{props.children}</button>
 }

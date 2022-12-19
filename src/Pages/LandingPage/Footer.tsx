@@ -1,7 +1,14 @@
 import Button from "../../components/Button";
 import indFlag from "../../assets/images/landingPage/ind_flag.png";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+
+    let naviagte = useNavigate();
+    const goToRegisterPage = () => {
+        naviagte("/register")
+    }
+
     return (
         <div className="w-full flex flex-col bg-[color:var(--rang-not-so-black)] items-center pt-20 pb-16" role="navigation">
             <div className="w-full grid gap-x-5 grid-cols-4 md:grid-cols-8 lg:md:grid-cols-12 max-w-[var(--page-max-width)] px-[var(--page-gutter)] md:px-[var(--md-page-gutter)]">
@@ -84,7 +91,7 @@ const Footer = () => {
                             </g>
                         </svg>
                     </a>
-                    <Button size="sm" color="purple" >Sign up</Button>
+                    <Button size="sm" color="purple" onClick={goToRegisterPage}>Sign up</Button>
                 </div>
             </div>
         </div>

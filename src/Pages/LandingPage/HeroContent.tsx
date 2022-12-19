@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 
 const HeroContent = () => {
+    let navigate = useNavigate();
+    const goToLoginPage = () => {
+        navigate("/login");
+    }
+
     return (
         <div className="z-10 grid gap-x-5 grid-cols-4 md:grid-cols-8 lg:md:grid-cols-12 w-full max-w-[var(--page-max-width)] px-[var(--page-gutter)] md:px-[var(--md-page-gutter)] py-[var(--section-spacing)] md:py-[var(--md-section-spacing)] lg:py-[var(--lg-section-spacing)]">
             <div className="hero-content-box col-span-4 md:col-span-5 lg:col-start-3 lg:col-span-8">
@@ -25,7 +31,7 @@ const HeroContent = () => {
                                             </Button>
                                         </div>
                                         <div className="mt-6 mr-6">
-                                            <Button size="lg" color="dark">
+                                            <Button size="lg" color="dark" onClick={goToLoginPage}>
                                                 Open Discord in your browser
                                             </Button>
                                         </div>
@@ -43,7 +49,7 @@ const HeroContent = () => {
                                         </Button>
                                     </div>
                                     <div className="mt-6 mr-6">
-                                        <Button size="sm" color="dark">
+                                        <Button size="sm" color="dark" onClick={goToLoginPage}>
                                             Open Discord in your browser
                                         </Button>
                                     </div>

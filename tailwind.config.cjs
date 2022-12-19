@@ -7,7 +7,8 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        'semi': '0 8px 15px rgba(0,0,0,.2)'
+        'semi': '0 8px 15px rgba(0,0,0,.2)',
+        'dark-elevation': '0 2px 10px 0 rgba(0,0,0,.2)'
       },
       keyframes: {
         'fade-in-up': {

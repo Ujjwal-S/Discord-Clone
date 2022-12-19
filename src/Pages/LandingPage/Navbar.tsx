@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"
 import Button from "../../components/Button";
 import Anchor from "../../components/Anchor";
 
@@ -17,6 +18,10 @@ const Navbar = () => {
         }
     }
 
+    let navigate = useNavigate();
+    const goToLoginPage = () => {
+        navigate("/login")
+    }
 
     return (
         <React.Fragment>
@@ -44,7 +49,7 @@ const Navbar = () => {
                                 </svg>
                             </a>
                             <div className="flex items-center">
-                                <Button size="sm" color="white">Login</Button>
+                                <Button size="sm" color="white" onClick={goToLoginPage}>Login</Button>
                                 {/* Hamburger Menu Icon*/}
                                 <button className="ml-5" onClick={() => sideMenuVisibility(true)}>
                                     <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,14 +72,14 @@ const Navbar = () => {
                                     <hr className="mt-6 mb-4" />
                                     <nav>
                                         <ul>
-                                            <li><Anchor url="/" color="dark" active={true}>Home</Anchor></li>
-                                            <li><Anchor url="/" color="dark">Download</Anchor></li>
-                                            <li><Anchor url="/" color="dark">Nitro</Anchor></li>
-                                            <li><Anchor url="/" color="dark">Discover</Anchor></li>
-                                            <li><Anchor url="/" color="dark">Safety</Anchor></li>
-                                            <li><Anchor url="/" color="dark">Support</Anchor></li>
-                                            <li><Anchor url="/" color="dark">Blog</Anchor></li>
-                                            <li><Anchor url="/" color="dark">Careers</Anchor></li>
+                                            <li><Anchor url="#" color="dark" active={true}>Home</Anchor></li>
+                                            <li><Anchor url="#" color="dark">Download</Anchor></li>
+                                            <li><Anchor url="#" color="dark">Nitro</Anchor></li>
+                                            <li><Anchor url="#" color="dark">Discover</Anchor></li>
+                                            <li><Anchor url="#" color="dark">Safety</Anchor></li>
+                                            <li><Anchor url="#" color="dark">Support</Anchor></li>
+                                            <li><Anchor url="#" color="dark">Blog</Anchor></li>
+                                            <li><Anchor url="#" color="dark">Careers</Anchor></li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -118,16 +123,16 @@ const Navbar = () => {
                         </a>
 
                         <div className="grow text-center mr-14">
-                            <Anchor url="/" color="light" weight="semibold">Download</Anchor>
-                            <Anchor url="/" color="light" weight="semibold">Nitro</Anchor>
-                            <Anchor url="/" color="light" weight="semibold">Discover</Anchor>
-                            <Anchor url="/" color="light" weight="semibold">Safety</Anchor>
-                            <Anchor url="/" color="light" weight="semibold">Support</Anchor>
-                            <Anchor url="/" color="light" weight="semibold">Blog</Anchor>
-                            <Anchor url="/" color="light" weight="semibold">Careers</Anchor>
+                            <Anchor url="#" color="light" weight="semibold">Download</Anchor>
+                            <Anchor url="#" color="light" weight="semibold">Nitro</Anchor>
+                            <Anchor url="#" color="light" weight="semibold">Discover</Anchor>
+                            <Anchor url="#" color="light" weight="semibold">Safety</Anchor>
+                            <Anchor url="#" color="light" weight="semibold">Support</Anchor>
+                            <Anchor url="#" color="light" weight="semibold">Blog</Anchor>
+                            <Anchor url="#" color="light" weight="semibold">Careers</Anchor>
                         </div>
 
-                        <Button size="sm" color="white">Login</Button>
+                        <Button size="sm" color="white" onClick={goToLoginPage}>Login</Button>
                     </nav>
                 </header>
             </div>
