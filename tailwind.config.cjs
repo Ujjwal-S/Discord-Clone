@@ -9,12 +9,17 @@ module.exports = {
       colors: {
         'background-primary': '#36393f',
         'background-secondary': '#2f3136',
+        'background-secondary-alt': '#292b2f',
         'background-tertiary': '#202224',
-        'status-green': '#00A55D'
+        'status-green': '#00A55D',
+        'sidepanel-text-color': '#96989D',
+        'interactive-hover': '#DCDDDE',
+        'background-modifier-hover': '#3b3e45',
       },
       boxShadow: {
         'semi': '0 8px 15px rgba(0,0,0,.2)',
-        'dark-elevation': '0 2px 10px 0 rgba(0,0,0,.2)'
+        'dark-elevation': '0 2px 10px 0 rgba(0,0,0,.2)',
+        'blur-on-top': '0px -4px 3px rgba(50, 50, 50, 0.75)',
       },
       keyframes: {
         'fade-in-up': {
