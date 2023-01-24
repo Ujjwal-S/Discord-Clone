@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .sidebar-icon {
+    @apply relative flex items-center justify-center h-12 w-12 mt-2 mb-2 mx-auto
+    rounded-3xl hover:rounded-2xl transition-all duration-100 ease-linear hover:cursor-pointer;
+  }
+
+  .sidebar-icon img {
+    @apply rounded-3xl hover:rounded-2xl transition-all duration-100 ease-linear
+  }
+
+  .sidebar-tooltip {
+    @apply absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md text-white bg-gray-900
+    text-xs font-bold transition-all duration-200 scale-0 origin-left;
+  }
+}
+
+
 :root { 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -112,7 +129,9 @@ body {
   }
 }
 
-
+.force-visiblity {
+  visibility: visible!important;
+}
 
 /*------------ Login Page ------------*/
 

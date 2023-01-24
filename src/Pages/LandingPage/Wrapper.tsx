@@ -22,7 +22,7 @@ const Wrapper = (props: WrapperProps) => {
             const entry = entries[0];
             if(entry.isIntersecting) {
                 if(ref.current != null) {
-                    ref.current.className += "animate-fade-up ";
+                    ref.current.className += " animate-fade-up force-visiblity ";
                 }
                 observer.disconnect()
             }
@@ -30,11 +30,14 @@ const Wrapper = (props: WrapperProps) => {
             threshold: 0.2
         })
         if (ref.current) observer.observe(ref.current);
+        return (() => {
+            observer.disconnect()
+        })
     }, [])
 
     return (
         <div className={`w-full relative flex flex-col items-center justify-center ${props.bg === "gray" ? 'bg-[color:var(--rang-off-white)]' : ''}`}>
-            <div ref={ref} className={`w-full grid gap-x-5 grid-cols-4 md:grid-cols-8 lg:grid-cols-12 max-w-[var(--page-max-width)] px-[var(--page-gutter)] md:px-[var(--md-page-gutter)] `+paddingStyleDir}>
+            <div ref={ref} className={`invisible w-full grid gap-x-5 grid-cols-4 md:grid-cols-8 lg:grid-cols-12 max-w-[var(--page-max-width)] px-[var(--page-gutter)] md:px-[var(--md-page-gutter)] `+paddingStyleDir}>
                 {props.children}
             </div>
         </div>

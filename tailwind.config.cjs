@@ -6,6 +6,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        'background-primary': '#36393f',
+        'background-secondary': '#2f3136',
+        'background-tertiary': '#202224',
+        'status-green': '#00A55D'
+      },
       boxShadow: {
         'semi': '0 8px 15px rgba(0,0,0,.2)',
         'dark-elevation': '0 2px 10px 0 rgba(0,0,0,.2)'
