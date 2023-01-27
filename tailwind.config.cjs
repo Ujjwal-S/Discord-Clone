@@ -15,6 +15,9 @@ module.exports = {
         'sidepanel-text-color': '#96989D',
         'interactive-hover': '#DCDDDE',
         'background-modifier-hover': '#3b3e45',
+        'app-header-dark': '#202225',
+        'app-icon-inactive': '#b9bbbe',
+        'chat-input-bg': '#40444b'
       },
       boxShadow: {
         'semi': '0 8px 15px rgba(0,0,0,.2)',

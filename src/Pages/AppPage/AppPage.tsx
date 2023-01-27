@@ -1,5 +1,6 @@
 import Sidebar from "./Sidebar";
-import SidePanel from "./SidePanel";
+import SidePanel from "./SidePanel/SidePanel";
+import AppView from "./AppView/AppView";
 
 const AppPage = () => {
     return (
@@ -7,6 +8,7 @@ const AppPage = () => {
             <Sidebar />
             <div className="w-full h-screen flex bg-background-primary">
                 <SidePanel />
+                <AppView />
             </div>
         </div>
     )
