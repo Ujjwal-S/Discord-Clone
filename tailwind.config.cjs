@@ -17,7 +17,11 @@ module.exports = {
         'background-modifier-hover': '#3b3e45',
         'app-header-dark': '#202225',
         'app-icon-inactive': '#b9bbbe',
-        'chat-input-bg': '#40444b'
+        'chat-input-bg': '#40444b',
+        'chat-hover-bg': '#32353b',
+        'chat-message-timestamp': '#72767d',
+        'chat-username-color': '#f1f1f1',
+        'chat-message-color': '#dcddde',
       },
       boxShadow: {
         'semi': '0 8px 15px rgba(0,0,0,.2)',

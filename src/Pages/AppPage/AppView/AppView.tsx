@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import AppHeader from "./AppHeader";
+import Message from "./Message";
 import SmallScreenSizeWarning from "./SmallScreenSizeWarning";
 import UserInput from "./UserInput";
 
@@ -46,7 +47,9 @@ const AppView = () => {
         <div className="w-full h-full overflow-y-auto flex flex-col">
             {(screenSize < 780) && <SmallScreenSizeWarning />}
             <AppHeader directMessage={true} screenSize={screenSize}/>
-            <div className="grow"></div>
+            <div className="grow overflow-auto scrollable">
+                {/* Render Message here */}
+            </div>
             <UserInput screenSize={screenSize} />
         </div>
     )

@@ -21,6 +21,7 @@ const UserInput = (props: {screenSize: number}) => {
     };
 
     function submitHandler(e:any) {
+        // TODO: MAKE ENTER IS SEND DEFAULT
         e.preventDefault();
     }
 
