@@ -16,6 +16,11 @@
     @apply absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md text-white bg-gray-900
     text-xs font-bold transition-all duration-200 scale-0 origin-left;
   }
+
+  .app-header-icon {
+    @apply inline-block mr-2 h-6 mx-2 select-none cursor-pointer text-app-icon-inactive
+  hover:text-interactive-hover
+  }
 }
 
 
@@ -128,6 +133,9 @@ body {
 
 .fade-up-mobile-menu {
   background: linear-gradient(hsla(0,0%,100%,0),#fff 25%);
+}
+.fade-left-app-header {
+  background: linear-gradient(90deg, hsla(0,0%,100%,0),#36393f 2%);
 }
 
 .chota {

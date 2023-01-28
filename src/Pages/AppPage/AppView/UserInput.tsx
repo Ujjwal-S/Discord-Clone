@@ -2,7 +2,7 @@ import { useRef } from "react";
 import griningFaceEmojiUrl from "../../../assets/images/appPage/grinning_face_emoji.png";
 import sendMessageIconUrl from "../../../assets/images/appPage/paper-plane.png";
 
-const UserInput = (props: {smallerScreen: boolean}) => {
+const UserInput = (props: {screenSize: number}) => {
 
     const ref = useRef<HTMLTextAreaElement>(null); 
 
@@ -42,7 +42,7 @@ const UserInput = (props: {smallerScreen: boolean}) => {
                     onChange={(e) => onChangeHandler(e)} 
                     rows={1}
                     className="p-2 h-8.5 w-full resize-none max-h-[100px] mt-[5px] bg-chat-input-bg text-white outline-none scrollable overflow-x-hidden"
-                    placeholder={`Message ${props.smallerScreen ? '' : '$/@ Some'}`}
+                    placeholder={`Message ${props.screenSize < 900 ? '' : '$/@ Some'}`}
                 ></textarea>
             </div>
             

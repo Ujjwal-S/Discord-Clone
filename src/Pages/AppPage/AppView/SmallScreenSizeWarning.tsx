@@ -1,8 +1,8 @@
 const SmallScreenSizeWarning = () => {
     return (
         <div className="p-1 bg-red-500 text-gray-100">
-            The Discord App is best viewed on screens bigger screens.
-            (Actual Discord app is also only responsive up to certain width, only their landing pages are!)
+            The Discord App is best viewed on bigger screen sizes.
+            (Actual Discord app is also responsive only up to a certain width!)
         </div>
     )
 }

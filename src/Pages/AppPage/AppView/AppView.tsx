@@ -21,16 +21,12 @@ const debouce = (callback: Function, delay: number): Function => {
 
 
 const AppView = () => {
-    const [smallerScreen, setSmallerScreen] = useState(window.innerWidth < 900 ? true : false);
+    const [screenSize, setScreenSize] = useState(window.innerWidth);
+
 
     const resizeHandler = useCallback(
         debouce(() => {
-            if (window.innerWidth < 900) {
-                setSmallerScreen(true);
-            }
-            else {
-                setSmallerScreen(false);
-            }
+            setScreenSize(window.innerWidth);
         }, 200)
         , []
     )
@@ -48,10 +44,10 @@ const AppView = () => {
 
     return (
         <div className="w-full h-full overflow-y-auto flex flex-col">
-            {smallerScreen && <SmallScreenSizeWarning />}
-            <AppHeader directMessage={true} smallerScreen={smallerScreen}/>
+            {(screenSize < 780) && <SmallScreenSizeWarning />}
+            <AppHeader directMessage={true} screenSize={screenSize}/>
             <div className="grow"></div>
-            <UserInput smallerScreen={smallerScreen} />
+            <UserInput screenSize={screenSize} />
         </div>
     )
 }
