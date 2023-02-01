@@ -2,31 +2,57 @@ import { useRef } from "react";
 import griningFaceEmojiUrl from "../../../assets/images/appPage/grinning_face_emoji.png";
 import sendMessageIconUrl from "../../../assets/images/appPage/paper-plane.png";
 
-const UserInput = (props: {screenSize: number}) => {
 
-    const ref = useRef<HTMLTextAreaElement>(null); 
+type UserInputProps = {
+    screenSize: number
+}
+
+
+const UserInput = (props: UserInputProps) => {
+
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const onChangeHandler = function(e: any) {
-        const target = e.target as HTMLTextAreaElement;
-        if(ref.current) {
-            e.target.style.height = 'inherit';
-            if (target.scrollHeight > 100) {
-                ref.current.style.overflowY = "scroll"
+        if (0) {
+            console.log("onchange ran")
+            const target = e.target as HTMLTextAreaElement;
+    
+            if(textareaRef.current) {
+                e.target.style.height = 'inherit';
+                if (target.scrollHeight > 100) {
+                    textareaRef.current.style.overflowY = "scroll"
+                }
+                else {
+                    textareaRef.current.style.overflowY = "hidden"
+                }
+                textareaRef.current.style.height = `${target.scrollHeight}px`;
             }
-            else {
-                ref.current.style.overflowY = "hidden"
-            }
-            ref.current.style.height = `${target.scrollHeight}px`;
         }
     };
 
+    const checkEnterKey = (e:any) => {
+        if (e.key === "Enter") {
+            e.preventDefault();  // To prevent insertion of \n because of enter key press
+            formRef.current?.dispatchEvent( 
+                new Event("submit", {
+                    'bubbles': true,
+                })
+            )
+        }
+    }
+
     function submitHandler(e:any) {
-        // TODO: MAKE ENTER IS SEND DEFAULT
+        console.log("Submitting Form")
+
         e.preventDefault();
+        if (textareaRef.current) {
+            textareaRef.current.value = '';
+        }
     }
 
     return (
-        <form onSubmit={(e) => submitHandler(e)}
+        <form ref={formRef} onSubmit={(e) => submitHandler(e)}
             className="flex mx-4 mb-6 mt-2 bg-chat-input-bg "
         >
             <div className="h-11 py-2.5 px-4 group cursor-pointer">
@@ -37,10 +63,11 @@ const UserInput = (props: {screenSize: number}) => {
             </div>
             <div className="grow">
                 <textarea 
-                    ref={ref} 
+                    ref={textareaRef} 
                     name="user_input_message" 
                     id="user_input_message" 
                     onChange={(e) => onChangeHandler(e)} 
+                    onKeyDown={checkEnterKey}
                     rows={1}
                     className="p-2 h-8.5 w-full resize-none max-h-[100px] mt-[5px] bg-chat-input-bg text-white outline-none scrollable overflow-x-hidden"
                     placeholder={`Message ${props.screenSize < 900 ? '' : '$/@ Some'}`}

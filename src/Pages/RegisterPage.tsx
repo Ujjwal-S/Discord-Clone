@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import bgImageUrl from "../assets/images/loginPage/bg.svg";
 
@@ -10,6 +10,57 @@ const RegisterPage = () => {
     const goToLoginPage = (e:MouseEvent) => {
         e.preventDefault();
         navigate("/login");
+    }
+
+    const check = (headers: number[]): (arg0: Uint8Array)=>boolean => {
+        return (buffers:Uint8Array) => {
+            for (let i = 0; i < headers.length; ++i) {
+                if (headers[i] !== buffers[i]) return false;
+            }
+            return true;
+        }
+    }
+    
+    const validateImageTypes = (buffer:Uint8Array) => {
+        const isPNG = check([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])(buffer);
+        if (isPNG) return true;
+        const isJPG = check([0xFF, 0xD8, 0xFF])(buffer)
+        if (isJPG) return true;
+        return false;
+    }
+
+    const readBuffer = async (file:File, start:number, end:number): Promise<ArrayBuffer> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file.slice(start, end));
+            reader.onerror = () => {
+                reject("There was some problem reading the file")
+            }
+            reader.onload = () => {
+                resolve(reader.result as ArrayBuffer)
+            }
+        })
+    }
+
+    const handleFileSelect = async (event:ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const file = event.target.files[0];
+            try{
+                const buffers = await readBuffer(file, 0, 8);
+                const uinit8Array = new Uint8Array(buffers);
+                const validImage = validateImageTypes(uinit8Array);
+                if (validImage) {
+                    console.log("Uploading Image...")
+                }
+                else {
+                    alert("We only support Avatar files that are in the PNG or JPEG format. It's possible that your file has a false (even if it says .png or .jpg) or incorrect extension name.")
+                }
+            }
+            catch (e) {
+                alert('That did not go well :(')
+                console.log(e);
+            }
+        }
     }
 
     return (
@@ -34,7 +85,12 @@ const RegisterPage = () => {
                                     <label className="uppercase mb-2 block text-xs font-bold tracking-wide" htmlFor="confirm-password">Confirm Password <span className="text-red-400">*</span></label>
                                     <input type="password" className="w-full h-10 p-[10px] border-none rounded-sm outline-none text-white bg-[color:#202225]" name="confirm-password" id="confirm-password" autoComplete="false" autoCorrect="false" autoCapitalize="false" spellCheck="false" />
                                 </div>
-                                <div className="w-full mt-5 flex gap-3 items-center">
+                                <div className="flex w-full justify-between items-end mt-4">
+                                    <label className="uppercase mb-2 inline-block text-xs font-bold tracking-wide">Choose Avatar <span className="text-red-400">*</span></label>
+                                    <label className="uppercase inline-block text-xs font-bold tracking-wide border border-gray-600 p-2 py-1.5 cursor-pointer text-emerald-500 hover:bg-[#303030] rounded-sm" htmlFor="avatar">Browse</label>
+                                    <input type="file" className="hidden" name="avatar" id="avatar" multiple={false} accept="image/*" onChange={handleFileSelect}/>
+                                </div>
+                                <div className="w-full mt-4 flex gap-3 items-center">
                                     <div onClick={() => setCheckboxStatus(current => !current)} className={`border border-[color:#72767d] rounded p-[1px] hover:cursor-pointer ${checkboxStatus ? 'bg-[var(--rang-brand)]' : ''}`} >
                                         <svg className={`${checkboxStatus ? '' : 'invisible'}`} aria-hidden="true" role="img" width="18" height="18" viewBox="0 0 24 24">
                                             <path fill="white" fillRule="evenodd" clipRule="evenodd" d="M8.99991 16.17L4.82991 12L3.40991 13.41L8.99991 19L20.9999 7.00003L19.5899 5.59003L8.99991 16.17Z"></path>

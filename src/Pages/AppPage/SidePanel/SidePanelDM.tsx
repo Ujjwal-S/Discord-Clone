@@ -11,8 +11,13 @@ const SidePanelDM = () => {
                 </svg>
             </div>
             <div className="userInfo whitespace-nowrap overflow-ellipsis overflow-hidden">
+                {/* Username */}
                 <p className="group-hover:text-interactive-hover text-sidepanel-text-color leading-5 font-semibold select-none">
                     Ujjwal Saxena
+                </p>
+                {/* Latest Message */}
+                <p className="group-hover:text-interactive-hover text-sidepanel-text-color text-xs text-ellipsis overflow-hidden">
+                    Namste ! Namste ! Namste ! Namste ! Namste ! Namste !
                 </p>
             </div>
         </li>

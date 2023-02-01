@@ -1,8 +1,19 @@
 import directMessagesDiscordLogo from "../../assets/images/appPage/direct_messages_discord_logo.svg";
 
-const SidebarIcon = (props: {children: React.ReactNode, directMessages: boolean, utilButton: boolean, tooltipText: string}) => {
+type SidebarIconProps = {
+    children: React.ReactNode, 
+    directMessages: boolean, 
+    utilButton: boolean, 
+    tooltipText: string,
+    onClick?: () => void
+}
+
+const SidebarIcon = (props: SidebarIconProps) => {
     return (
-        <div className={`sidebar-icon group ${props.directMessages ? 'bg-[#5865f2] rounded-2xl' : ''} ${props.utilButton ? 'bg-background-primary hover:bg-status-green' : ''}`}>
+        <div
+            onClick={props.onClick}
+            className={`sidebar-icon group ${props.directMessages ? 'bg-[#5865f2] rounded-2xl' : ''} ${props.utilButton ? 'bg-background-primary hover:bg-status-green' : ''}`}
+        >
             {props.children}
             <span className="sidebar-tooltip group-hover:scale-100">
                 {props.tooltipText}
@@ -11,7 +22,11 @@ const SidebarIcon = (props: {children: React.ReactNode, directMessages: boolean,
     )
 }
 
-const Sidebar = () => {
+type SidebarProps = {
+    showNewServerModal: () => void
+}
+
+const Sidebar = (props: SidebarProps) => {
     return (
         <nav className="bg-background-tertiary min-w-[72px]">
             {/* Direct Messages */}
@@ -31,7 +46,7 @@ const Sidebar = () => {
 
 
             {/* Util Buttons */}
-            <SidebarIcon directMessages={false} utilButton={true} tooltipText="Add a Server">
+            <SidebarIcon directMessages={false} utilButton={true} tooltipText="Add a Server" onClick={props.showNewServerModal}>
                 <svg className="text-status-green group-hover:text-white" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M20 11.1111H12.8889V4H11.1111V11.1111H4V12.8889H11.1111V20H12.8889V12.8889H20V11.1111Z">
                     </path>

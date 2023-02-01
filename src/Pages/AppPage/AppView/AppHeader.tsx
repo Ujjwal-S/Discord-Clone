@@ -4,8 +4,13 @@ import onlineStatusIconUrl from "../../../assets/images/appPage/online_status.sv
 import searchIconUrl from "../../../assets/images/appPage/search_icon.svg"
 import hashtagIconUrl from "../../../assets/images/appPage/hashtag.svg";
 
+type AppHeaderProps = {
+    directMessage: boolean,
+    screenSize:  number
+}
 
-const AppHeader = (props: {directMessage: boolean, screenSize: number}) => {
+
+const AppHeader = (props: AppHeaderProps) => {
     const ref = useRef<HTMLInputElement>(null)
     
 

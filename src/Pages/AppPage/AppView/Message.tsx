@@ -1,4 +1,9 @@
-const Message = (props: {message: string, imageUrl?: string}) => {
+type MessageProps = {
+    message: string,
+    imageUrl?: string
+}
+
+const Message = (props: MessageProps) => {
     return (
         <div className="flex px-4 py-3 hover:bg-chat-hover-bg mt-1">
             <img
