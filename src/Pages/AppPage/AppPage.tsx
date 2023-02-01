@@ -4,32 +4,54 @@ import SidePanel from "./SidePanel/SidePanel";
 import AppView from "./AppView/AppView";
 import Modal from "../../components/Modal";
 import CreateNewServer from "./CreateNewServer";
+import CreateNewChannel from "./CreateNewChannel";
+
+export type ModalDisplayTypes =  "NEW SERVER" | "NEW CHANNEL";
+
+type ShowModalType = {
+    show: boolean
+    type: ModalDisplayTypes | ""
+} 
 
 const AppPage = () => {
-    const [displayNewServerModal, setDisplayNewServerModal] = useState(false);
-
-    const showNewServerModal = () => {
-        setDisplayNewServerModal(true)
+    const [showModal, setShowModal] = useState<ShowModalType>({show: false, type: ""});
+    
+    const displayModal = (type: ModalDisplayTypes) => {
+        setShowModal({
+            show: true, 
+            type
+        })
     }
-    const hideNewServerModal = () => {
-        console.log("Heelo")
-        setDisplayNewServerModal(false)
+
+    const hideModal = () => {
+        setShowModal({
+            show: false, type: ""
+        })
     }
 
     return (
-        <div className="w-full h-screen flex">
-            {   displayNewServerModal
+        <>
+            {showModal.show
                 &&
-                <Modal heading="Create New Server" onClose={hideNewServerModal}>
-                    <CreateNewServer />
+                <Modal onClose={hideModal} heading={showModal.type === "NEW SERVER" ? "Create new server" : "Create new channel"}> 
+                    {showModal.type === "NEW SERVER"
+                        ? <CreateNewServer />
+                        : <CreateNewChannel />
+                    }
                 </Modal>
             }
-            <Sidebar showNewServerModal={showNewServerModal} />
-            <div className="w-full h-screen flex bg-background-primary">
-                <SidePanel />
-                <AppView />
+
+            <div className="w-full h-screen flex">
+
+                <Sidebar createNewServer={displayModal} />
+
+                <div className="w-full h-screen flex bg-background-primary">
+                    <SidePanel createNewChannel={displayModal} />
+                    <AppView />
+                </div>
+                
             </div>
-        </div>
+        </>
     )
 }
 
