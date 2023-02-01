@@ -1,10 +1,15 @@
-import { useState, MouseEvent, ChangeEvent } from "react";
+import { useState, MouseEvent, ChangeEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import bgImageUrl from "../assets/images/loginPage/bg.svg";
+import validateImage from "../utils/checkValidImage"
 
 const RegisterPage = () => {
 
     const [checkboxStatus, setCheckboxStatus] = useState(false);
+    const [imageValid, setImageValid] = useState(false)
+
+    const imagePreviewRef = useRef<HTMLImageElement>(null);
+    const imageInputRef = useRef<HTMLInputElement>(null);
 
     let navigate = useNavigate();
     const goToLoginPage = (e:MouseEvent) => {
@@ -12,53 +17,26 @@ const RegisterPage = () => {
         navigate("/login");
     }
 
-    const check = (headers: number[]): (arg0: Uint8Array)=>boolean => {
-        return (buffers:Uint8Array) => {
-            for (let i = 0; i < headers.length; ++i) {
-                if (headers[i] !== buffers[i]) return false;
-            }
-            return true;
-        }
-    }
-    
-    const validateImageTypes = (buffer:Uint8Array) => {
-        const isPNG = check([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])(buffer);
-        if (isPNG) return true;
-        const isJPG = check([0xFF, 0xD8, 0xFF])(buffer)
-        if (isJPG) return true;
-        return false;
-    }
-
-    const readBuffer = async (file:File, start:number, end:number): Promise<ArrayBuffer> => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsArrayBuffer(file.slice(start, end));
-            reader.onerror = () => {
-                reject("There was some problem reading the file")
-            }
-            reader.onload = () => {
-                resolve(reader.result as ArrayBuffer)
-            }
-        })
-    }
-
     const handleFileSelect = async (event:ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             const file = event.target.files[0];
-            try{
-                const buffers = await readBuffer(file, 0, 8);
-                const uinit8Array = new Uint8Array(buffers);
-                const validImage = validateImageTypes(uinit8Array);
-                if (validImage) {
-                    console.log("Uploading Image...")
+            const valid = await validateImage(file);
+            if (valid) {
+                console.log("Uploading Image...")
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(file)
+                fileReader.onload = function (ev) {
+                    // @ts-ignore
+                    imagePreviewRef.current?.setAttribute("src", ev.target.result)
                 }
-                else {
-                    alert("We only support Avatar files that are in the PNG or JPEG format. It's possible that your file has a false (even if it says .png or .jpg) or incorrect extension name.")
-                }
+                setImageValid(true);
             }
-            catch (e) {
-                alert('That did not go well :(')
-                console.log(e);
+            else {
+                if (imageInputRef) {
+                    imageInputRef.current!.value = "";  // ! <- non-null assertion (error was, 'imageInputRef.current' is possibly 'null')
+                }
+                alert("We only accept PNG or JPEG files as Avatar images. It's possible that your file has a false (even if it says .png or .jpg) OR incorrect extension name.")
+                setImageValid(false);
             }
         }
     }
@@ -87,8 +65,11 @@ const RegisterPage = () => {
                                 </div>
                                 <div className="flex w-full justify-between items-end mt-4">
                                     <label className="uppercase mb-2 inline-block text-xs font-bold tracking-wide">Choose Avatar <span className="text-red-400">*</span></label>
-                                    <label className="uppercase inline-block text-xs font-bold tracking-wide border border-gray-600 p-2 py-1.5 cursor-pointer text-emerald-500 hover:bg-[#303030] rounded-sm" htmlFor="avatar">Browse</label>
-                                    <input type="file" className="hidden" name="avatar" id="avatar" multiple={false} accept="image/*" onChange={handleFileSelect}/>
+                                    <div className="flex">
+                                        {imageValid && <img ref={imagePreviewRef} className="max-h-8 max-w-[50px] pr-3" />}
+                                        <label className="uppercase inline-block text-xs font-bold tracking-wide border border-gray-600 p-2 py-1.5 cursor-pointer text-emerald-500 hover:bg-[#303030] rounded-sm" htmlFor="avatar">Browse</label>
+                                        <input ref={imageInputRef} type="file" className="hidden" name="avatar" id="avatar" multiple={false} accept="image/*" onChange={handleFileSelect}/>
+                                    </div>
                                 </div>
                                 <div className="w-full mt-4 flex gap-3 items-center">
                                     <div onClick={() => setCheckboxStatus(current => !current)} className={`border border-[color:#72767d] rounded p-[1px] hover:cursor-pointer ${checkboxStatus ? 'bg-[var(--rang-brand)]' : ''}`} >
