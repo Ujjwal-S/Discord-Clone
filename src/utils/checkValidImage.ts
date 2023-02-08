@@ -28,10 +28,16 @@ const readBuffer = async (file:File, start:number, end:number): Promise<ArrayBuf
     })
 }
 
-const validateImage = async (file: File) => {
+const validateImageType = async (file: File) => {
     const buffers = await readBuffer(file, 0, 8);
     const uinit8Array = new Uint8Array(buffers);
     return validateImageTypes(uinit8Array);
 }
 
-export default validateImage;
+export default validateImageType
+
+// export default validateImageType;
+
+export const imageWithinSizeLimit = (file: File) => {
+    return file.size < 524288;
+}

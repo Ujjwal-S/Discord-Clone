@@ -26,6 +26,23 @@
     @apply inline-block mr-2 h-6 mx-2 select-none cursor-pointer text-app-icon-inactive
   hover:text-interactive-hover
   }
+
+  .form-label {
+    @apply uppercase mb-2 block text-xs font-bold tracking-wide
+  }
+
+  .google-btn {
+    @apply col-span-1 google-button order-1 inline-flex items-center justify-center text-white text-base mb-2 px-4 
+    py-[10px] bg-[var(--rang-brand)] hover:bg-[#4752c4] transition-all duration-200 rounded-md font-semibold
+  }
+
+  .login-register-other-btn {
+    @apply col-span-2 order-2 other-button text-white text-base mb-2 px-4 py-[10px] bg-[var(--rang-brand)] 
+    hover:bg-[#4752c4] transition-all duration-200 rounded-md font-semibold flex justify-center items-center
+  }
+  .input-box {
+    @apply w-full h-10 p-[10px] border-none rounded-sm outline-none text-white bg-[color:#202225]
+  }
 }
 
 

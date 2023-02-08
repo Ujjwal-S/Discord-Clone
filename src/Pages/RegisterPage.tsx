@@ -1,42 +1,97 @@
-import { useState, MouseEvent, ChangeEvent, useRef } from "react";
+import { useState, MouseEvent, ChangeEvent, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import bgImageUrl from "../assets/images/loginPage/bg.svg";
-import validateImage from "../utils/checkValidImage"
+import bgImageUrl from "../assets/images/loginRegisterPage/bg.svg";
+import googleIcon from "../assets/images/loginRegisterPage/googleIcon.svg";
+import loader from "../assets/images/loginRegisterPage/loader.svg"
+import  validateImageType, { imageWithinSizeLimit } from "../utils/checkValidImage";
+import validateEmail from "../utils/checkValidEmail";
+import sendToast from "../utils/sendToast";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { registerWithEmail } from "../store/authSlice";
 
 const RegisterPage = () => {
-
     const [checkboxStatus, setCheckboxStatus] = useState(false);
     const [imageValid, setImageValid] = useState(false)
 
     const imagePreviewRef = useRef<HTMLImageElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
-    let navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const {user, loading} = useAppSelector((state) => state.userAuth)
+    useEffect(() => {
+        if(user) {
+            navigate("/app/");
+        }
+    }, [user])
+
     const goToLoginPage = (e:MouseEvent) => {
         e.preventDefault();
         navigate("/login");
     }
 
+    const clearImageInput = () => {
+        if (imageInputRef) {
+            imageInputRef.current!.value = "";
+            setImageValid(false);
+        }
+    }
+
     const handleFileSelect = async (event:ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
+        if (event.target.files && event.target.files?.length > 0) {
             const file = event.target.files[0];
-            const valid = await validateImage(file);
+            if (!imageWithinSizeLimit(file)) {
+                sendToast('error', 'File size beyond allowed range! Choose a file lesser than 0.5MB')
+                clearImageInput();
+                return;
+            }
+
+            const valid = await validateImageType(file);
             if (valid) {
-                console.log("Uploading Image...")
                 const fileReader = new FileReader();
                 fileReader.readAsDataURL(file)
                 fileReader.onload = function (ev) {
                     // @ts-ignore
                     imagePreviewRef.current?.setAttribute("src", ev.target.result)
                 }
-                setImageValid(true);
+                setImageValid(true);  
             }
             else {
-                if (imageInputRef) {
-                    imageInputRef.current!.value = "";  // ! <- non-null assertion (error was, 'imageInputRef.current' is possibly 'null')
+                clearImageInput();
+                sendToast('error', "We only accept PNG or JPEG files as Avatar images. It's possible that your file has a false (even if it says .png or .jpg) OR incorrect extension name.")
+            }
+        }
+    }
+
+    const submitHandler = (e:React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        
+        if (formRef.current) {
+            const formData = new FormData(formRef.current);
+            const email = formData.get("email") as string
+            const password = formData.get("password") as string
+            const confirmPassword = formData.get("confirm-password")
+            const avatar = formData.get("avatar") as File
+            
+            if (email && password && confirmPassword && avatar.size > 0) {
+                if (!validateEmail(email)) {
+                    sendToast('error', 'That email looks wrong');
+                    return
                 }
-                alert("We only accept PNG or JPEG files as Avatar images. It's possible that your file has a false (even if it says .png or .jpg) OR incorrect extension name.")
-                setImageValid(false);
+                if (password !== confirmPassword) {
+                    sendToast('error', 'Passwords do not match.');
+                    return
+                }
+                if (password.length < 6) {
+                    sendToast('error', 'Password should be atleast 6 characters long.');
+                    return
+                }
+                dispatch(registerWithEmail({email, password, imageFile: avatar}))
+            }
+            else {
+                sendToast("error", "All fields are required");
             }
         }
     }
@@ -46,29 +101,51 @@ const RegisterPage = () => {
             <img className="w-full h-full fixed top-0 left-0" src={bgImageUrl} alt="background image" />
                 <div className="absolute flex justify-center items-center top-0 left-0 min-h-[664px] w-full h-full">
                     <div className="register-form-container bg-[var(--rang-primary-dark)] text-[color:var(--text-gray)] text-lg p-8 shadow-dark-elevation">
-                        <form className="">
+                        <form ref={formRef} onSubmit={submitHandler}>
                             <div>
                                 <h1 className="mb-2 text-2xl leading-[30px] text-center text-white font-semibold">Create an account</h1>
                             </div>
                             <div className="w-full mt-5">
                                 <div className="mb-5">
-                                    <label className="uppercase mb-2 block text-xs font-bold tracking-wide" htmlFor="email">Email <span className="text-red-400">*</span></label>
-                                    <input type="email" className="w-full h-10 p-[10px] border-none rounded-sm outline-none text-white bg-[color:#202225]" name="email" id="email" autoComplete="false" autoCorrect="false" autoCapitalize="false" spellCheck="false" />
+                                    <label className="form-label" htmlFor="email">Email <span className="text-red-400">*</span></label>
+                                    <input 
+                                        type="email" 
+                                        className="input-box" 
+                                        name="email" id="email" autoComplete="false" autoCorrect="false" 
+                                        autoCapitalize="false" spellCheck="false" 
+                                    />
                                 </div>
                                 <div className="w-full mt-5">
-                                    <label className="uppercase mb-2 block text-xs font-bold tracking-wide" htmlFor="password">Password <span className="text-red-400">*</span></label>
-                                    <input type="password" className="w-full h-10 p-[10px] border-none rounded-sm outline-none text-white bg-[color:#202225]" name="password" id="password" autoComplete="false" autoCorrect="false" autoCapitalize="false" spellCheck="false" />
+                                    <label className="form-label" htmlFor="password">Password <span className="text-red-400">*</span></label>
+                                    <input 
+                                        type="password" 
+                                        className="input-box" 
+                                        name="password" id="password" autoComplete="false" autoCorrect="false" 
+                                        autoCapitalize="false" spellCheck="false" 
+                                    />
                                 </div>
                                 <div className="w-full mt-5">
-                                    <label className="uppercase mb-2 block text-xs font-bold tracking-wide" htmlFor="confirm-password">Confirm Password <span className="text-red-400">*</span></label>
-                                    <input type="password" className="w-full h-10 p-[10px] border-none rounded-sm outline-none text-white bg-[color:#202225]" name="confirm-password" id="confirm-password" autoComplete="false" autoCorrect="false" autoCapitalize="false" spellCheck="false" />
+                                    <label className="form-label" htmlFor="confirm-password">Confirm Password <span className="text-red-400">*</span></label>
+                                    <input
+                                        type="password" 
+                                        className="input-box" 
+                                        name="confirm-password" id="confirm-password" autoComplete="false" 
+                                        autoCorrect="false" autoCapitalize="false" spellCheck="false" 
+                                    />
                                 </div>
                                 <div className="flex w-full justify-between items-end mt-4">
-                                    <label className="uppercase mb-2 inline-block text-xs font-bold tracking-wide">Choose Avatar <span className="text-red-400">*</span></label>
+                                    <label className="form-label inline-block">Choose Avatar <span className="text-red-400">*</span></label>
                                     <div className="flex">
                                         {imageValid && <img ref={imagePreviewRef} className="max-h-8 max-w-[50px] pr-3" />}
-                                        <label className="uppercase inline-block text-xs font-bold tracking-wide border border-gray-600 p-2 py-1.5 cursor-pointer text-emerald-500 hover:bg-[#303030] rounded-sm" htmlFor="avatar">Browse</label>
-                                        <input ref={imageInputRef} type="file" className="hidden" name="avatar" id="avatar" multiple={false} accept="image/*" onChange={handleFileSelect}/>
+                                        <label className="form-label mb-0 inline-block border border-gray-600 p-2 py-1.5 cursor-pointer text-emerald-500 hover:bg-[#303030] rounded-sm" htmlFor="avatar">Browse</label>
+                                        <input 
+                                            ref={imageInputRef} 
+                                            type="file" 
+                                            className="hidden" 
+                                            name="avatar" id="avatar" multiple={false} 
+                                            accept="image/*" 
+                                            onChange={handleFileSelect}
+                                        />
                                     </div>
                                 </div>
                                 <div className="w-full mt-4 flex gap-3 items-center">
@@ -80,15 +157,20 @@ const RegisterPage = () => {
                                     <p className="text-xs">It’s okay to send me emails with Discord updates, tips, and special offers. You can opt out at any time.</p>
                                 </div>
                                 <div className="grid grid-cols-3 gap-5 mt-6">
-                                    <button type="submit" className="col-span-1 google-button order-1 inline-flex items-center justify-center text-white text-base mb-2 px-4 py-[10px] bg-[var(--rang-brand)] hover:bg-[#4752c4] transition-all duration-200 rounded-md font-semibold">
-                                        <svg className="mr-2" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
-                                            <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
-                                        </svg>
+                                    <button type="submit" className={`google-btn ${loading ? 'cursor-not-allowed' : ''}`} disabled={loading}>
+                                        <img src={googleIcon} className="mr-2" alt="Signup with Google" />
                                         Sign Up
                                     </button>
-                                    <button type="submit" className="col-span-2 order-2 other-button text-white text-base mb-2 px-4 py-[10px] bg-[var(--rang-brand)] hover:bg-[#4752c4] transition-all duration-200 rounded-md font-semibold">Register</button>
+                                    <button type="submit" className={`login-register-other-btn ${loading ? 'cursor-not-allowed' : ''}`}>
+                                        { loading && <img src={loader} className="animate-spin w-4 inline-block mr-2" alt="loading" /> }
+                                        { loading ? 'Processing...' : 'Register' }
+                                    </button>
                                 </div>
-                                <p className="text-sm text-[color:#a3a6aa] pl-[2px] mt-2">Already have an account? <a onClick={e => goToLoginPage(e)} className="font-medium text-[var(--rang-text-link)] text-sm" href="/login">Login</a></p>
+                                <p className="text-sm text-[color:#a3a6aa] pl-[2px] mt-2">
+                                    Already have an account? 
+                                    <a onClick={e => goToLoginPage(e)} className="font-medium text-[var(--rang-text-link)] text-sm" href="/login">&nbsp;Login
+                                    </a>
+                                </p>
                             </div>
                         </form>
                     </div>
