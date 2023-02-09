@@ -1,6 +1,5 @@
-import { ref, uploadBytes, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "./firebase";
-import sendToast from "../utils/sendToast";
 
 const BUCKET_URL = "gs://discord-clone-424a3.appspot.com"
 
