@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import Button from "../../components/Button";
 import Anchor from "../../components/Anchor";
+import { useAppSelector } from "../../store/hooks";
 
 const Navbar = () => {
+    const user = useAppSelector(state => state.userAuth.user);
     const [sideMenuVisible, setSideMenuVisible] = useState(false);
 
     const sideMenuVisibility = (visibilty_status: boolean) => {
@@ -21,6 +23,9 @@ const Navbar = () => {
     let navigate = useNavigate();
     const goToLoginPage = () => {
         navigate("/login")
+    }
+    const goToAppPage = () => {
+        navigate("/app")
     }
 
     return (
@@ -49,7 +54,11 @@ const Navbar = () => {
                                 </svg>
                             </a>
                             <div className="flex items-center">
-                                <Button size="sm" color="white" onClick={goToLoginPage}>Login</Button>
+                                {
+                                    user
+                                    ? null
+                                    : <Button size="sm" color="white" onClick={goToLoginPage}>Login</Button>
+                                }
                                 {/* Hamburger Menu Icon*/}
                                 <button className="ml-5" onClick={() => sideMenuVisibility(true)}>
                                     <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -132,7 +141,11 @@ const Navbar = () => {
                             <Anchor url="#" color="light" weight="semibold">Careers</Anchor>
                         </div>
 
-                        <Button size="sm" color="white" onClick={goToLoginPage}>Login</Button>
+                        {
+                            user
+                            ? <Button size="sm" color="white" onClick={goToAppPage}>Open Discrod</Button>
+                            : <Button size="sm" color="white" onClick={goToLoginPage}>Login</Button>
+                        }
                     </nav>
                 </header>
             </div>

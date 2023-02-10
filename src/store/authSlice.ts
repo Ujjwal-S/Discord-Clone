@@ -110,6 +110,7 @@ const authSlice = createSlice({
         .addCase(registerWithEmail.fulfilled, (state, action) => {
             state.loading = false,
             state.user = action.payload
+            localStorage.setItem("user", JSON.stringify(action.payload))
             sendToast("success", "Awesome! Welcome to the Discord Clone")
         })
         .addCase(registerWithEmail.rejected, (state, action) => {
@@ -126,6 +127,7 @@ const authSlice = createSlice({
         .addCase(googleSignIn.fulfilled, (state, action) => {
             state.loading = false,
             state.user = action.payload
+            localStorage.setItem("user", JSON.stringify(action.payload))
             sendToast("success", "Welcome!")
         })
         .addCase(googleSignIn.rejected, (state, action) => {
@@ -142,6 +144,7 @@ const authSlice = createSlice({
         .addCase(loginWithEmail.fulfilled, (state, action) => {
             state.loading = false,
             state.user = action.payload
+            localStorage.setItem("user", JSON.stringify(action.payload))
             sendToast("success", "Welcome back!")
         })
         .addCase(loginWithEmail.rejected, (state, action) => {
