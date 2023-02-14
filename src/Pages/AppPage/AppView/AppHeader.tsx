@@ -45,7 +45,7 @@ const AppHeader = (props: AppHeaderProps) => {
                         :
                             <img src={hashtagIconUrl} className="h-6 mx-2 inline-block select-none" draggable="false" alt="hashtag" />
                     }
-                    <span className="mr-2 text-[#f1f1f1] font-bold relative top-[1px]">Ujjwal_S</span>
+                    <span className="mr-2 text-[#f1f1f1] font-bold relative top-[1px] select-none">Ujjwal_S</span>
                     <img src={onlineStatusIconUrl} className="inline-block mr-2 select-none cursor-pointer" draggable="false" alt="status" />
                 </div>
             </div>
@@ -92,8 +92,8 @@ const AppHeader = (props: AppHeaderProps) => {
                 </div>
 
                 <div className="relative mx-2">
-                    <input ref={ref} onClick={handleOnClick} className="transition-all w-36 bg-app-header-dark text-white rounded-[4px] py-1 px-2 text-sm leading-4 font-semibold tracking-wide outline-none border-none" type="text" name="search_box_chat" id="search_box_chat" placeholder="Search" />
-                    <img className="h-4 absolute right-1 top-1" src={searchIconUrl} alt="search icon" />
+                    <input ref={ref} onClick={handleOnClick} className="transition-all w-36 bg-app-header-dark text-white rounded-[4px] py-1 px-2 text-sm leading-4 font-semibold tracking-wide outline-none border-none select-none" type="text" name="search_box_chat" id="search_box_chat" placeholder="Search" />
+                    <img className="h-4 absolute right-1 top-1 select-none" src={searchIconUrl} alt="search icon" />
                 </div>
 
                 <div className="app-header-icon">

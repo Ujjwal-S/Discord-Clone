@@ -73,16 +73,13 @@
   scrollbar-width: thin;
   scrollbar-color: #202225 #2f3136;
 }
-body::-webkit-scrollbar {
-  width: 12px;
-}
 .scrollable::-webkit-scrollbar {
   width: 7px;
 }
-body::-webkit-scrollbar-track, .scrollable::-webkit-scrollbar {
+.scrollable::-webkit-scrollbar {
   background: #2f3136;
 }
-body::-webkit-scrollbar-thumb, .scrollable::-webkit-scrollbar-thumb {
+.scrollable::-webkit-scrollbar-thumb {
   background-color: #202225;
 }
 

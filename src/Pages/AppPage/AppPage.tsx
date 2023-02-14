@@ -2,51 +2,28 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import SidePanel from "./SidePanel/SidePanel";
 import AppView from "./AppView/AppView";
-import Modal from "../../components/Modal";
-import CreateNewServer from "./CreateNewServer";
-import CreateNewChannel from "./CreateNewChannel";
+import CreateNewServer from "./components/CreateNewServer";
+import CreateNewChannel from "./components/CreateNewChannel";
 
-export type ModalDisplayTypes =  "NEW SERVER" | "NEW CHANNEL";
-
-type ShowModalType = {
-    show: boolean
-    type: ModalDisplayTypes | ""
-} 
 
 const AppPage = () => {
-    const [showModal, setShowModal] = useState<ShowModalType>({show: false, type: ""});
-    
-    const displayModal = (type: ModalDisplayTypes) => {
-        setShowModal({
-            show: true, 
-            type
-        })
-    }
-
+    const [showCreateNewServerModal, setShowCreateNewServerModal] = useState(false); 
+    const [showCreateNewChannelModal, setShowCreateNewChannelModal] = useState(false);
     const hideModal = () => {
-        setShowModal({
-            show: false, type: ""
-        })
+        if (showCreateNewServerModal) setShowCreateNewServerModal(false)
+        if (showCreateNewChannelModal) setShowCreateNewChannelModal(false)
     }
 
     return (
         <>
-            {showModal.show
-                &&
-                <Modal onClose={hideModal} heading={showModal.type === "NEW SERVER" ? "Create new server" : "Create new channel"}> 
-                    {showModal.type === "NEW SERVER"
-                        ? <CreateNewServer />
-                        : <CreateNewChannel />
-                    }
-                </Modal>
-            }
-
+            {showCreateNewServerModal && <CreateNewServer onClose={hideModal} />}
+            {showCreateNewChannelModal && <CreateNewChannel onClose={hideModal} />}
             <div className="w-full h-screen flex">
 
-                <Sidebar createNewServer={displayModal} />
+                <Sidebar createNewServer={() => setShowCreateNewServerModal(true)} />
 
                 <div className="w-full h-screen flex bg-background-primary">
-                    <SidePanel createNewChannel={displayModal} />
+                    <SidePanel createNewChannel={() => setShowCreateNewChannelModal(true)} />
                     <AppView />
                 </div>
                 

@@ -1,14 +1,8 @@
 import SidePanelDM from "./SidePanelDM";
 import SidePanelChannel from "./SidePanelChannel";
 import BottomControlPanel from "./BottomControlPanel";
-import { ModalDisplayTypes } from "../AppPage";
 
-type SidePanelProps = {
-    createNewChannel: (type: ModalDisplayTypes) => void
-}
-
-
-const SidePanel = (props: SidePanelProps) => {
+const SidePanel = (props: {createNewChannel: () => void}) => {
     return(
         <nav className="h-screen min-w-[240px] max-w-[240px] bg-background-secondary flex flex-col">
             {/* Server Header */}
@@ -16,7 +10,7 @@ const SidePanel = (props: SidePanelProps) => {
                 <h3 className="font-semibold">
                     Server Name
                 </h3>
-                <button className="text-2xl group relative" onClick={() => props.createNewChannel("NEW CHANNEL") }>
+                <button className="text-2xl group relative" onClick={props.createNewChannel}>
                     +
                     <span className="tooltip-bottom group-hover:scale-100">
                         Create new Channel in Server

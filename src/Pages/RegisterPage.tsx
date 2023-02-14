@@ -100,7 +100,7 @@ const RegisterPage = () => {
     }
 
     return (
-        <div className="relative w-full h-screen">
+        <div className="relative w-full h-screen bg-login-register-bg">
             <img className="w-full h-full fixed top-0 left-0" src={bgImageUrl} alt="background image" />
                 <div className="absolute flex justify-center items-center top-0 left-0 min-h-[664px] w-full h-full">
                     <div className="register-form-container bg-[var(--rang-primary-dark)] text-[color:var(--text-gray)] text-lg p-8 shadow-dark-elevation">

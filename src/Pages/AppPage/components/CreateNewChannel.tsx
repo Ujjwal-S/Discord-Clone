@@ -1,8 +1,9 @@
-import Button from "../../components/Button";
+import Button from "../../../components/Button";
+import Modal from "../../../components/Modal";
 
-const CreateNewChannel = () => {
+const CreateNewChannel = (props: {onClose: () => void}) => {
     return (
-        <>
+        <Modal heading="Create New Channel" onClose={props.onClose}>
             <div className="p-1 w-72 md:w-[500px]">
                 <div className="w-full mt-5">
                     <label className="uppercase mb-2 block text-xs font-bold tracking-wide" htmlFor="new-channel-name">Channel Name <span className="text-red-400">*</span></label>
@@ -14,7 +15,7 @@ const CreateNewChannel = () => {
                     Create Channel
                 </Button>
             </div>
-        </>
+        </Modal>
     )
 }
 

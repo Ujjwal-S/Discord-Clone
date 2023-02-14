@@ -2,7 +2,7 @@ const BottomControlPanel = () => {
     return(
         <div className="bg-background-secondary-alt min-h-[52px] flex justify-between items-center px-2 shadow-blur-on-top">
             {/* Avatar Wrapper */}
-            <div className="flex items-center rounded cursor-pointer hover:bg-background-modifier-hover min-w-[120px]">
+            <div className="flex items-center select-none rounded cursor-pointer hover:bg-background-modifier-hover min-w-[120px]">
                 <div className="avatar">
                     <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
                         <foreignObject x="0" y="0" width="32" height="32" mask="url(#svg-mask-avatar-status-round-32)">

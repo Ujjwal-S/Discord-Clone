@@ -1,12 +1,7 @@
 import directMessagesDiscordLogo from "../../assets/images/appPage/direct_messages_discord_logo.svg";
-import SidebarIcon from "./SidebarIcon";
-import { ModalDisplayTypes } from "./AppPage";
+import SidebarIcon from "./components/SidebarIcon";
 
-type SidebarProps = {
-    createNewServer: (type: ModalDisplayTypes) => void
-}
-
-const Sidebar = (props: SidebarProps) => {
+const Sidebar = (props: {createNewServer: () => void}) => {
     
 
     return (
@@ -28,7 +23,7 @@ const Sidebar = (props: SidebarProps) => {
 
 
             {/* Util Buttons */}
-            <SidebarIcon onClick={() => props.createNewServer("NEW SERVER")} directMessages={false} utilButton={true} tooltipText="Add a Server">
+            <SidebarIcon onClick={props.createNewServer} directMessages={false} utilButton={true} tooltipText="Add a Server">
                 <svg className="text-status-green group-hover:text-white" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M20 11.1111H12.8889V4H11.1111V11.1111H4V12.8889H11.1111V20H12.8889V12.8889H20V11.1111Z">
                     </path>

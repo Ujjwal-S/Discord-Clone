@@ -10,7 +10,7 @@ const SidePanelDM = () => {
                     <circle cx="27" cy="27" r="6" stroke="#2f3136" strokeWidth="3" fill="#00A55D" />
                 </svg>
             </div>
-            <div className="userInfo whitespace-nowrap overflow-ellipsis overflow-hidden">
+            <div className="userInfo whitespace-nowrap overflow-ellipsis overflow-hidden select-none">
                 {/* Username */}
                 <p className="group-hover:text-interactive-hover text-sidepanel-text-color leading-5 font-semibold select-none">
                     Ujjwal Saxena

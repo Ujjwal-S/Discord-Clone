@@ -58,7 +58,7 @@ const LoginPage = () => {
     }
 
     return (
-        <div className="relative w-full h-screen">
+        <div className="relative w-full h-screen bg-login-register-bg">
             <img className="w-full h-full fixed top-0 left-0 select-none" src={bgImageUrl} alt="background image" />
             <div className="absolute flex justify-center items-center top-0 left-0 min-h-[580px] w-full h-full">
                 <div className="form-container bg-[var(--rang-primary-dark)] text-[color:var(--text-gray)] text-lg p-8 shadow-dark-elevation">

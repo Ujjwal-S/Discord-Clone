@@ -10,6 +10,7 @@ module.exports = {
         'modal-backdrop': '#2f31363a',
         'modal-background': '#2e2e2e',
         'modal-text': '#f2f2f2',
+        'login-register-bg': '#5865f2',
         'background-primary': '#36393f',
         'background-secondary': '#2f3136',
         'background-secondary-alt': '#292b2f',
