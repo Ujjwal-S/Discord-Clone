@@ -2,11 +2,9 @@ import { useRef } from "react";
 import griningFaceEmojiUrl from "../../../assets/images/appPage/grinning_face_emoji.png";
 import sendMessageIconUrl from "../../../assets/images/appPage/paper-plane.png";
 
-
 type UserInputProps = {
     screenSize: number
 }
-
 
 const UserInput = (props: UserInputProps) => {
 
@@ -14,20 +12,19 @@ const UserInput = (props: UserInputProps) => {
     const formRef = useRef<HTMLFormElement>(null);
 
     const onChangeHandler = function(e: any) {
-        if (0) {
-            console.log("onchange ran")
-            const target = e.target as HTMLTextAreaElement;
-    
-            if(textareaRef.current) {
-                e.target.style.height = 'inherit';
-                if (target.scrollHeight > 100) {
-                    textareaRef.current.style.overflowY = "scroll"
-                }
-                else {
-                    textareaRef.current.style.overflowY = "hidden"
-                }
-                textareaRef.current.style.height = `${target.scrollHeight}px`;
+
+        console.log("onchange ran")
+        const target = e.target as HTMLTextAreaElement;
+
+        if(textareaRef.current) {
+            e.target.style.height = 'inherit';
+            if (target.scrollHeight > 100) {
+                textareaRef.current.style.overflowY = "scroll"
             }
+            else {
+                textareaRef.current.style.overflowY = "hidden"
+            }
+            textareaRef.current.style.height = `${target.scrollHeight}px`;
         }
     };
 

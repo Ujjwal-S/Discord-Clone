@@ -2,6 +2,7 @@ import {useState, useRef, ChangeEvent} from "react";
 import validateImage from "../../../utils/checkValidImage";
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
+import sendToast from "../../../utils/sendToast";
 
 const CreateNewServer = (props: {onClose: () => void}) => {
     const [imageValid, setImageValid] = useState(false)
@@ -27,7 +28,8 @@ const CreateNewServer = (props: {onClose: () => void}) => {
                 if (imageInputRef) {
                     imageInputRef.current!.value = "";  // ! <- non-null assertion (error was, 'imageInputRef.current' is possibly 'null')
                 }
-                alert("We only accept PNG or JPEG files as Avatar images. It's possible that your file has a false (even if it says .png or .jpg) OR incorrect extension name.")
+                sendToast("error", 
+                "We only accept PNG or JPEG files as Avatar images. It's possible that your file has a false (even if it says .png or .jpg) OR incorrect extension name.")
                 setImageValid(false);
             }
         }
