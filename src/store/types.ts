@@ -10,12 +10,13 @@ export type UserInfo = {
 }
 
 export type UserState = {
-    user: {
-        uid: string,
-        email: string,
-        photoURL: string
-    } 
-    | null,
+    uid: string,
+    email: string,
+    photoURL: string
+} | null
+
+export type AuthState = {
+    user: UserState,
     loading: boolean,
     loginOrRegisterMethod: "email" | "google" | null
 }

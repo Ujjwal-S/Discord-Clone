@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import {createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import { 
     createUserWithEmail, signInWithGoogle,
     signInWithEmail
@@ -7,7 +7,7 @@ import { auth } from "../firebase/firebase";
 import { updateProfile, User } from "firebase/auth";
 import { uploadImage } from "../firebase/storage";
 import sendToast from "../utils/sendToast";
-import { UserInfo, UserState, Credentials } from "./types";
+import { UserInfo, AuthState, Credentials, UserState } from "./types";
 
 
 export const loginWithEmail = createAsyncThunk ( 'auth/loginWithEmail',
@@ -77,29 +77,21 @@ export const registerWithEmail = createAsyncThunk( 'auth/registerWithEmail',
     }    
 )
 
-let loggedInUser = null;
-let userExists = localStorage.getItem("user");
-if (userExists) {
-    loggedInUser = JSON.parse(userExists);
-}
-
-const initialState: UserState =  {
-    user: 
-        loggedInUser
-        ? {
-            uid: loggedInUser.uid,
-            email: loggedInUser.email as string,
-            photoURL: loggedInUser.photoURL as string
-        }
-        : null,
-    loading: false,
+const initialState: AuthState =  {
+    user: null,
+    loading: true,
     loginOrRegisterMethod: null
 }
 
 const authSlice = createSlice({
     name: 'authSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        updateUser: (state, action:PayloadAction<UserState>) => {
+            state.user = action.payload
+            state.loading = false
+        }
+    },
     extraReducers: (builder) => {
         builder
         // Signup with Email
@@ -110,7 +102,6 @@ const authSlice = createSlice({
         .addCase(registerWithEmail.fulfilled, (state, action) => {
             state.loading = false,
             state.user = action.payload
-            localStorage.setItem("user", JSON.stringify(action.payload))
             sendToast("success", "Awesome! Welcome to the Discord Clone")
         })
         .addCase(registerWithEmail.rejected, (state, action) => {
@@ -127,7 +118,6 @@ const authSlice = createSlice({
         .addCase(googleSignIn.fulfilled, (state, action) => {
             state.loading = false,
             state.user = action.payload
-            localStorage.setItem("user", JSON.stringify(action.payload))
             sendToast("success", "Welcome!")
         })
         .addCase(googleSignIn.rejected, (state, action) => {
@@ -144,7 +134,6 @@ const authSlice = createSlice({
         .addCase(loginWithEmail.fulfilled, (state, action) => {
             state.loading = false,
             state.user = action.payload
-            localStorage.setItem("user", JSON.stringify(action.payload))
             sendToast("success", "Welcome back!")
         })
         .addCase(loginWithEmail.rejected, (state, action) => {
@@ -155,4 +144,5 @@ const authSlice = createSlice({
     }
 })
 
+export const {updateUser} = authSlice.actions
 export default authSlice.reducer
