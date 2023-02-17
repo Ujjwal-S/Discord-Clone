@@ -4,13 +4,13 @@ import { getStorage } from "firebase/storage"
 import { getFirestore } from "firebase/firestore"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAW-MFpAon7rCyJENuMK5wCIE8o5tWVD1U",
-  authDomain: "discord-clone-424a3.firebaseapp.com",
-  projectId: "discord-clone-424a3",
-  storageBucket: "discord-clone-424a3.appspot.com",
-  messagingSenderId: "375956520715",
-  appId: "1:375956520715:web:4d1a37fe40d3009b992c0e",
-  measurementId: "G-9CGM6LTX1T"
+  apiKey: "AIzaSyD7zrCw-rLySOky-rEMp12_MesJoeL7p7k",
+  authDomain: "discord-ka-clone.firebaseapp.com",
+  projectId: "discord-ka-clone",
+  storageBucket: "discord-ka-clone.appspot.com",
+  messagingSenderId: "29493265441",
+  appId: "1:29493265441:web:1d65e2196683198d73cf60",
+  measurementId: "G-74ZV4MMH24"
 };
 
 

@@ -1,7 +1,7 @@
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "./firebase";
 
-const BUCKET_URL = "gs://discord-clone-424a3.appspot.com"
+const BUCKET_URL = "gs://discord-ka-clone.appspot.com"
 
 export function uploadImage(image: File): Promise<string> {
 

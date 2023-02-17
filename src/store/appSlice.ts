@@ -1,0 +1,20 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppState } from "./types";
+
+const initialState: AppState = {
+    activeScreen: "directMessages",
+    activeChat: null
+}
+
+const appSlice = createSlice({
+    name: 'appSlice',
+    initialState,
+    reducers: {
+        updateAppState(state, action: PayloadAction<AppState>) {
+            state = action.payload
+        }
+    }   
+})
+
+export const {updateAppState} = appSlice.actions
+export default appSlice.reducer
