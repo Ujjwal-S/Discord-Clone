@@ -23,19 +23,43 @@ export type AuthState = {
 
 // appSlice
 
-type ServerScreen = {
+type ServerChat = {
     serverId: string,
+    serverName: string,
     channelId: string | null
+    channelName: string | null
+}
+
+export type DMFriendChat = {
+    combinedId: string,
+    friendUid: string,
+    friendPhotoURL: string,
+    friendEmail: string,
+    lastMessage: string,
+    lastMessageTime: string,
+    firstTimeChat: boolean
 }
 
 export type ActiveScreen = "directMessages" | "server"
-export type ActiveChat = string | ServerScreen | null
+export type ActiveChat = DMFriendChat | ServerChat | null
 
 export type AppState = {
     activeScreen: ActiveScreen
     activeChat: ActiveChat
 }
-// activeChat, when activeScreen is DM, will hold combinedId
-// activeChat, when activeScreen is ServerScreen will hold serverId, channelId,
+// activeChat, when activeScreen is directMessages will hold null
+// if user clicks on a friend then that chat will loaded with DMChat (info)
+
+// activeChat, when activeScreen is ServerChat will hold serverId, channelId,
 // if server icon was clicked, then channelId will be null, only when user selects
 // channel it will updated 
+
+
+
+
+// appSlice
+
+export type FriendsWithState = {
+    friendsWith: DMFriendChat[]
+    loading: boolean
+}

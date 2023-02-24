@@ -1,18 +1,18 @@
 import { useRef } from "react";
 import griningFaceEmojiUrl from "../../../assets/images/appPage/grinning_face_emoji.png";
 import sendMessageIconUrl from "../../../assets/images/appPage/paper-plane.png";
+import { useAppSelector } from "../../../store/hooks";
 
 type UserInputProps = {
     screenSize: number
 }
 
 const UserInput = (props: UserInputProps) => {
-
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
+    const {activeScreen, activeChat} = useAppSelector(state => state.appState)
 
     const onChangeHandler = function(e: any) {
-
         console.log("onchange ran")
         const target = e.target as HTMLTextAreaElement;
 
@@ -48,10 +48,22 @@ const UserInput = (props: UserInputProps) => {
         }
     }
 
+    const getActiveChat = () => {
+        if (activeChat) {
+            // @ts-ignore
+            if (activeScreen === "directMessages") return activeChat.friendEmail
+            // @ts-ignore
+            if (activeChat.channelName) return activeChat.channelName
+            // @ts-ignore
+            return activeChat.serverName
+        }
+        return "";
+    }
+
     return (
         <form ref={formRef} onSubmit={(e) => submitHandler(e)}
-            className="flex mx-4 mb-6 mt-2 bg-chat-input-bg "
-        >
+        >   
+        <fieldset className="flex mx-4 mb-6 mt-2 bg-chat-input-bg" disabled={activeChat ? false : true}>
             <div className="h-11 py-2.5 px-4 group cursor-pointer">
                 <svg className="text-app-icon-inactive group-hover:text-interactive-hover h-6 w-6" width="24" height="24" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z">
@@ -67,7 +79,7 @@ const UserInput = (props: UserInputProps) => {
                     onKeyDown={checkEnterKey}
                     rows={1}
                     className="p-2 h-8.5 w-full resize-none max-h-[100px] mt-[5px] bg-chat-input-bg text-white outline-none scrollable overflow-x-hidden"
-                    placeholder={`Message ${props.screenSize < 900 ? '' : '$/@ Some'}`}
+                    placeholder={`Message ${props.screenSize < 900 ? '' : getActiveChat()}`}
                 ></textarea>
             </div>
             
@@ -95,6 +107,7 @@ const UserInput = (props: UserInputProps) => {
                     <img src={griningFaceEmojiUrl} className="select-none brightness-90 grayscale group-hover:brightness-100 h-7 min-w-[28px]" draggable="false" alt="emojis" />
                 </div>
             </div>
+        </fieldset>
         </form>
     )
 }

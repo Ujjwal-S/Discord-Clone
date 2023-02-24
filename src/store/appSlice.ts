@@ -11,7 +11,8 @@ const appSlice = createSlice({
     initialState,
     reducers: {
         updateAppState(state, action: PayloadAction<AppState>) {
-            state = action.payload
+            state.activeScreen = action.payload.activeScreen
+            state.activeChat = action.payload.activeChat
         }
     }   
 })

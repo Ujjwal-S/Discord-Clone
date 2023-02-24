@@ -3,6 +3,7 @@ import atTheRateIconUrl from "../../../assets/images/appPage/@.svg";
 import onlineStatusIconUrl from "../../../assets/images/appPage/online_status.svg";
 import searchIconUrl from "../../../assets/images/appPage/search_icon.svg"
 import hashtagIconUrl from "../../../assets/images/appPage/hashtag.svg";
+import { useAppSelector } from "../../../store/hooks";
 
 type AppHeaderProps = {
     directMessage: boolean,
@@ -12,7 +13,7 @@ type AppHeaderProps = {
 
 const AppHeader = (props: AppHeaderProps) => {
     const ref = useRef<HTMLInputElement>(null)
-    
+    const {activeScreen, activeChat} = useAppSelector(state => state.appState)
 
     useEffect(() => {
         function clickOutsideHandler(e:any) {
@@ -34,10 +35,11 @@ const AppHeader = (props: AppHeaderProps) => {
         }
     }
 
+
     return (
         <header className="min-h-[48px] px-2 flex justify-between items-center border-b border-b-background-tertiary">
             
-            <div className={`relative h-full ${props.screenSize < 810 ? 'hidden' : ''}`}>
+            <div className={`relative w-full h-full ${props.screenSize < 810 ? 'hidden' : ''}`}>
                 <div className="z-10 flex items-center absolute h-full">
                     {props.directMessage
                         ?
@@ -45,8 +47,17 @@ const AppHeader = (props: AppHeaderProps) => {
                         :
                             <img src={hashtagIconUrl} className="h-6 mx-2 inline-block select-none" draggable="false" alt="hashtag" />
                     }
-                    <span className="mr-2 text-[#f1f1f1] font-bold relative top-[1px] select-none">Ujjwal_S</span>
-                    <img src={onlineStatusIconUrl} className="inline-block mr-2 select-none cursor-pointer" draggable="false" alt="status" />
+                    {
+                        activeScreen === "directMessages"
+                        && // @ts-ignore
+                        <div className="mr-2 text-[#f1f1f1] font-bold relative top-[1px] select-none">{activeChat !== null ? activeChat.friendEmail : 'Direct Messages'}</div>
+                    }
+                    {
+                        activeScreen === "server"
+                        && // @ts-ignore
+                        <div className="mr-2 text-[#f1f1f1] font-bold relative top-[1px] select-none">{activeChat.channelName !== null ? activeChat.channelName : activeChat.serverName}</div>
+                    }
+                    <img src={onlineStatusIconUrl} className="inline-block mr-2 select-none" draggable="false" alt="status" />
                 </div>
             </div>
 
@@ -92,7 +103,7 @@ const AppHeader = (props: AppHeaderProps) => {
                 </div>
 
                 <div className="relative mx-2">
-                    <input ref={ref} onClick={handleOnClick} className="transition-all w-36 bg-app-header-dark text-white rounded-[4px] py-1 px-2 text-sm leading-4 font-semibold tracking-wide outline-none border-none select-none" type="text" name="search_box_chat" id="search_box_chat" placeholder="Search" />
+                    <input ref={ref} onClick={handleOnClick} className="transition-all w-36 bg-app-header-dark text-white rounded-[4px] py-1 pl-2 pr-6 text-sm leading-4 font-semibold tracking-wide outline-none border-none select-none" type="text" name="search_box_chat" id="search_box_chat" placeholder="Search" />
                     <img className="h-4 absolute right-1 top-1 select-none" src={searchIconUrl} alt="search icon" />
                 </div>
 

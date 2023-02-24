@@ -8,7 +8,7 @@ const Sidebar = (props: {createNewServer: () => void}) => {
         <nav className="bg-background-tertiary min-w-[72px]">
             {/* Direct Messages */}
             <SidebarIcon directMessages={true} utilButton={false} tooltipText="Direct Messages">
-                <img src={directMessagesDiscordLogo} alt="direct messages" />
+                <img src={directMessagesDiscordLogo} draggable={false} className="select-none" alt="direct messages" />
             </SidebarIcon>
             
             <div className="h-[2px] w-8 rounded-sm bg-[#4f545c7a] mx-auto">
