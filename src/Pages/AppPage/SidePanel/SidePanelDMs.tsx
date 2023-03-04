@@ -16,24 +16,10 @@ const SidePanelDMs = () => {
         const friendsWithRef = collection(db, "friendsWith");
         const q = query(friendsWithRef, where("myUid", "==", me?.uid))
         
-        async function getLastMessage(arr:DMFriendChat[]) {
-            const promises = arr.map(async (item) => {
-                const directMessagesRef = collection(db, `directMessages/${item.combinedId}/chats/`);
-                const q = query(directMessagesRef, orderBy("createdAt"), limitToLast(1));
-                const result = await getDocs(q);
-                const data = result.docs[0];
-                item["lastMessage"] = data.data().message;
-                item["lastMessageTime"] = data.data().createdAt.toDate().toString()
-                return item;
-            })
-
-            const results = await Promise.allSettled(promises);
-            return results;
-        }
-
         const unsub = onSnapshot(q, async (querySnapshot) => {
             let friends:DMFriendChat[] = [];
             querySnapshot.docChanges().forEach(change => {
+
                 if (change.type === "added") {
                     const data = change.doc.data()
                     friends.push({
@@ -42,20 +28,20 @@ const SidePanelDMs = () => {
                         friendPhotoURL: data.friendPhotoURL,
                         friendUid: data.friendUid,
                         firstTimeChat: false,
-                        lastMessage: "",                                     // default values incase is fetching
-                        lastMessageTime: new Date("1970-12-01").toString()   // lastMessage fails
-                        // this defaults to a very old date, so that if fetching fails,
-                        // this chat is automatically pushed to last (after sorting)
+                        // default values
+                        lastMessage: "",                                     
+                        lastMessageTime: new Date("1970-12-01").toString()
                     })
                 }
             })
-            await getLastMessage(friends)
             dispatch(
                 updateFriendsList(friends)
             )
         })
 
-        return () => unsub()
+        return () => {
+            unsub()
+        }
     }, []) 
 
 

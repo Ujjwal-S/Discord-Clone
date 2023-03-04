@@ -41,24 +41,15 @@ export type DMFriendChat = {
 }
 
 export type ActiveScreen = "directMessages" | "server"
-export type ActiveChat = DMFriendChat | ServerChat | null
 
 export type AppState = {
     activeScreen: ActiveScreen
-    activeChat: ActiveChat
+    activeChat: DMFriendChat | null
+    activeChannel: ServerChat | null
 }
-// activeChat, when activeScreen is directMessages will hold null
-// if user clicks on a friend then that chat will loaded with DMChat (info)
-
-// activeChat, when activeScreen is ServerChat will hold serverId, channelId,
-// if server icon was clicked, then channelId will be null, only when user selects
-// channel it will updated 
-
-
 
 
 // appSlice
-
 export type FriendsWithState = {
     friendsWith: DMFriendChat[]
     loading: boolean

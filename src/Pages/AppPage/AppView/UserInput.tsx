@@ -1,7 +1,11 @@
 import { useRef } from "react";
 import griningFaceEmojiUrl from "../../../assets/images/appPage/grinning_face_emoji.png";
 import sendMessageIconUrl from "../../../assets/images/appPage/paper-plane.png";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../../../firebase/firebase";
 import { useAppSelector } from "../../../store/hooks";
+import sendToast from "../../../utils/sendToast";
+
 
 type UserInputProps = {
     screenSize: number
@@ -10,10 +14,10 @@ type UserInputProps = {
 const UserInput = (props: UserInputProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
-    const {activeScreen, activeChat} = useAppSelector(state => state.appState)
+    const {activeScreen, activeChat, activeChannel} = useAppSelector(state => state.appState)
+    const me = useAppSelector(state => state.userAuth.user)
 
     const onChangeHandler = function(e: any) {
-        console.log("onchange ran")
         const target = e.target as HTMLTextAreaElement;
 
         if(textareaRef.current) {
@@ -32,7 +36,7 @@ const UserInput = (props: UserInputProps) => {
         if (e.key === "Enter") {
             e.preventDefault();  // To prevent insertion of \n because of enter key press
             formRef.current?.dispatchEvent( 
-                new Event("submit", {
+                new Event("submit", {  // triggers submitHandler function
                     'bubbles': true,
                 })
             )
@@ -40,24 +44,35 @@ const UserInput = (props: UserInputProps) => {
     }
 
     function submitHandler(e:any) {
-        console.log("Submitting Form")
-
         e.preventDefault();
-        if (textareaRef.current) {
-            textareaRef.current.value = '';
+        if (!textareaRef.current?.value) return;
+
+        let ref = null, combinedId = "";
+        if (activeChat && activeChat.combinedId){
+            combinedId = activeChat.combinedId
+            ref = collection(db, `directMessages/${combinedId}/chats/`)
+        }
+        if (!ref || !combinedId || !me) return;
+
+        try {
+            addDoc(ref, {
+                senderUid: me.uid,
+                senderEmail: me.email,
+                senderPhotoURL: me.photoURL,
+                createdAt: serverTimestamp(),
+                message: textareaRef.current.value
+            })
+            textareaRef.current.value = ''
+        } catch (e) {
+            console.log(e)
+            sendToast("error", "Sending message failed :(")
         }
     }
 
     const getActiveChat = () => {
-        if (activeChat) {
-            // @ts-ignore
-            if (activeScreen === "directMessages") return activeChat.friendEmail
-            // @ts-ignore
-            if (activeChat.channelName) return activeChat.channelName
-            // @ts-ignore
-            return activeChat.serverName
-        }
-        return "";
+        if (activeChat) return activeChat.friendEmail
+        if (activeChannel && activeChannel.channelName) return activeChannel.channelName
+        return activeChannel?.serverName || ""
     }
 
     return (

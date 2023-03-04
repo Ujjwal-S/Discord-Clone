@@ -15,7 +15,6 @@ const CreateNewServer = (props: {onClose: () => void}) => {
             const file = event.target.files[0];
             const valid = await validateImage(file);
             if (valid) {
-                console.log("Uploading Image...")
                 const fileReader = new FileReader();
                 fileReader.readAsDataURL(file)
                 fileReader.onload = function (ev) {

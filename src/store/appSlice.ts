@@ -3,7 +3,8 @@ import { AppState } from "./types";
 
 const initialState: AppState = {
     activeScreen: "directMessages",
-    activeChat: null
+    activeChat: null,
+    activeChannel: null,
 }
 
 const appSlice = createSlice({

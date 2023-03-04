@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { DMFriendChat } from "../../../store/types";
 import { updateLastMessage } from "../../../store/friendsWithSlice";
 import { updateAppState } from "../../../store/appSlice";
-import { useAppDispatch } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { collection, onSnapshot, query, orderBy, limitToLast } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 
 const SidePanelDM = (props: {friend:DMFriendChat}) => {
     const [lastMessage, setLatestMessage] = useState(props.friend.lastMessage)
     const [lastMessageTime, setLatestMessageTime] = useState(props.friend.lastMessageTime)
+    const activeChat = useAppSelector(state => state.appState.activeChat)
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -17,9 +18,10 @@ const SidePanelDM = (props: {friend:DMFriendChat}) => {
             const directMessagesRef = collection(db, `directMessages/${props.friend.combinedId}/chats/`)
             const q = query(directMessagesRef, orderBy("createdAt"), limitToLast(1))
             unsub = onSnapshot(q, (querySnapshot) => {
-                if (querySnapshot.docs.length > 0){
+                if (querySnapshot.docs.length > 0 && !querySnapshot.metadata.hasPendingWrites){
+                    const d = querySnapshot.docs[0].data().createdAt.toDate().toString()
                     setLatestMessage(querySnapshot.docs[0].data().message)
-                    setLatestMessageTime(querySnapshot.docs[0].data().createdAt.toDate().toString())
+                    setLatestMessageTime(d)
                     dispatch(
                         updateLastMessage({  // this will update list sort as well
                             combinedId: props.friend.combinedId,
@@ -38,7 +40,8 @@ const SidePanelDM = (props: {friend:DMFriendChat}) => {
     }, [])
 
     const selectChat = () => {
-        let activeChat: DMFriendChat = {
+        if (activeChat?.friendUid === props.friend.friendUid) return;
+        let thisChat: DMFriendChat = {
             combinedId: props.friend.combinedId,
             friendUid: props.friend.friendUid, 
             friendPhotoURL: props.friend.friendPhotoURL, 
@@ -49,7 +52,8 @@ const SidePanelDM = (props: {friend:DMFriendChat}) => {
         }
         dispatch(updateAppState({
             activeScreen: "directMessages",
-            activeChat: activeChat
+            activeChat: thisChat,
+            activeChannel: null
         }))
     }
 

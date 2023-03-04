@@ -1,24 +1,34 @@
-type MessageProps = {
+export type MessageType = {
+    id: string,
+    combinedId: string,
     message: string,
-    imageUrl?: string
+    imageUrl: string | undefined
+    createdAt: number,
+    createdAtObj: {seconds:number, nanoseconds:number},
+    senderUid: string,
+    senderEmail: string,
+    senderPhotoURL: string,
 }
 
-const Message = (props: MessageProps) => {
+const Message = (props: MessageType) => {
+
     return (
         <div className="flex px-4 py-3 hover:bg-chat-hover-bg mt-1">
-            <img
-                className="h-8 rounded-full select-none cursor-pointer mr-3" draggable={false}
-                src="https://cdn.discordapp.com/avatars/159985870458322944/b50adff099924dd5e6b72d13f77eb9d7.webp?size=32" 
-                alt="user profile picture" 
-            />
+            <div className="h-8 w-8 mr-3">
+                <img
+                    className="h-8 rounded-full select-none cursor-pointer" draggable={false}
+                    src={props.senderPhotoURL}
+                    alt="user profile picture" 
+                />
+            </div>
             <div>
                 {/* Message Info */}
                 <div className="mb-1">
-                    <span className="text-chat-username-color  cursor-pointer font-medium mr-2">
-                        Some Username
+                    <span className="text-chat-username-color text-sm cursor-pointer font-medium mr-2">
+                        {props.senderEmail.slice(0, props.senderEmail.lastIndexOf("@"))}
                     </span>
                     <span className="text-chat-message-timestamp text-xs font-semibold space-x-2">
-                        Jan 23, 2023 12:27 AM
+                        {new Date(props.createdAt).toLocaleString()}
                     </span>
                 </div>
                 {/* Message Content */}
