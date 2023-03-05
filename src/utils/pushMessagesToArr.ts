@@ -9,7 +9,7 @@ export const pushMessagesToArr = (messages: QuerySnapshot<DocumentData>, combine
         arr.push({
             id: doc.id,
             combinedId,
-            imageUrl: docData.imageUrl,
+            imageURL: docData.imageURL,
             createdAt: docData.createdAt.toMillis(),
             createdAtObj: docData.createdAt,
             message: docData.message,
@@ -27,7 +27,7 @@ export const addMessageToArr = (message: DocumentChange<DocumentData>, arr: Mess
     arr.push({
         id: message.doc.id,
         combinedId,
-        imageUrl: docData.imageUrl,
+        imageURL: docData.imageURL,
         createdAt: docData.createdAt.toMillis(),
         createdAtObj: docData.createdAt,
         message: docData.message,

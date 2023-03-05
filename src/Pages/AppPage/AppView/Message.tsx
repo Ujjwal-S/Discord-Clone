@@ -2,7 +2,7 @@ export type MessageType = {
     id: string,
     combinedId: string,
     message: string,
-    imageUrl: string | undefined
+    imageURL: string | undefined
     createdAt: number,
     createdAtObj: {seconds:number, nanoseconds:number},
     senderUid: string,
@@ -33,7 +33,7 @@ const Message = (props: MessageType) => {
                 </div>
                 {/* Message Content */}
                 <div>
-                    {props.imageUrl && <img src={`${props.imageUrl}`} className="w-auto h-auto max-w-[60%] mb-3 mt-2 cursor-pointer" alt="user sent image" />}
+                    {props.imageURL && <img src={`${props.imageURL}`} className="w-auto h-auto max-w-[60%] mb-3 mt-2 cursor-pointer" alt="user sent image" />}
                     <p className="text-chat-message-color ">
                         {props.message}
                     </p>

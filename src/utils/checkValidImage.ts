@@ -1,3 +1,5 @@
+import sendToast from "./sendToast"
+
 const check = (headers: number[]): (arg0: Uint8Array)=>boolean => {
     return (buffers:Uint8Array) => {
         for (let i = 0; i < headers.length; ++i) {
@@ -36,8 +38,32 @@ const validateImageType = async (file: File) => {
 
 export default validateImageType
 
-// export default validateImageType;
-
 export const imageWithinSizeLimit = (file: File) => {
     return file.size < 524288;
+}
+
+export const handleImageSelect = (e:React.ChangeEvent<HTMLInputElement>): Promise<string> => {
+    return new Promise(async (resolve, reject) =>{
+        if (!e.target.files || e.target.files.length < 1) return "";
+        const file = e.target.files[0];
+        if (!imageWithinSizeLimit(file)) {
+            sendToast('error', 'File size beyond allowed range! Choose a file lesser than 0.5MB')
+            return reject();
+        }
+        const valid = await validateImageType(file);
+        if (valid) {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file)
+            fileReader.onerror = function() {
+                sendToast("error", "Something went wrong with selected image.")
+            }
+            fileReader.onload = function (ev) {
+                if (ev.target?.result) return resolve(ev.target.result as string)
+                return reject();
+            }
+        }else {
+            sendToast("error", "We only accept PNG or JPEG files as Avatar images. It's possible that your file has a false (even if it says .png or .jpg) OR incorrect extension name.")
+            return reject();
+        }
+    })
 }

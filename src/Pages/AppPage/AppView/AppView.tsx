@@ -158,7 +158,7 @@ const AppView = () => {
                         combinedId={message.combinedId}
                         createdAt={message.createdAt}
                         createdAtObj={message.createdAtObj}
-                        imageUrl={message.imageUrl}
+                        imageURL={message.imageURL}
                         message={message.message}
                         senderPhotoURL={message.senderPhotoURL}
                         senderUid={message.senderUid}

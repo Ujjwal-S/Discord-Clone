@@ -5,14 +5,15 @@ import googleIcon from "../assets/images/loginRegisterPage/googleIcon.svg";
 import loader from "../assets/images/loginRegisterPage/loader.svg"
 import  validateImageType, { imageWithinSizeLimit } from "../utils/checkValidImage";
 import validateEmail from "../utils/checkValidEmail";
+import { handleImageSelect } from "../utils/checkValidImage";
 import sendToast from "../utils/sendToast";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { registerWithEmail, googleSignIn } from "../store/authSlice";
 
 const RegisterPage = () => {
     const [checkboxStatus, setCheckboxStatus] = useState(false);
-    const [imageValid, setImageValid] = useState(false)
-
+    const [imagePreviewLink, setImagePreviewLink] = useState("")
+    
     const imagePreviewRef = useRef<HTMLImageElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
@@ -38,33 +39,17 @@ const RegisterPage = () => {
     const clearImageInput = () => {
         if (imageInputRef) {
             imageInputRef.current!.value = "";
-            setImageValid(false);
+            setImagePreviewLink("")
         }
     }
 
     const handleFileSelect = async (event:ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files?.length > 0) {
-            const file = event.target.files[0];
-            if (!imageWithinSizeLimit(file)) {
-                sendToast('error', 'File size beyond allowed range! Choose a file lesser than 0.5MB')
-                clearImageInput();
-                return;
-            }
-
-            const valid = await validateImageType(file);
-            if (valid) {
-                const fileReader = new FileReader();
-                fileReader.readAsDataURL(file)
-                fileReader.onload = function (ev) {
-                    // @ts-ignore
-                    imagePreviewRef.current?.setAttribute("src", ev.target.result)
-                }
-                setImageValid(true);  
-            }
-            else {
-                clearImageInput();
-                sendToast('error', "We only accept PNG or JPEG files as Avatar images. It's possible that your file has a false (even if it says .png or .jpg) OR incorrect extension name.")
-            }
+        try{
+            const data = await handleImageSelect(event)
+            setImagePreviewLink(data)
+        }catch (e) {
+            clearImageInput()
+            console.log("Error uploading image...", e)
         }
     }
 
@@ -140,7 +125,7 @@ const RegisterPage = () => {
                                         <div className="flex w-full justify-between items-end mt-4">
                                             <label className="form-label inline-block">Choose Avatar <span className="text-red-400">*</span></label>
                                             <div className="flex">
-                                                {imageValid && <img ref={imagePreviewRef} className="max-h-8 max-w-[50px] pr-3" />}
+                                                {imagePreviewLink && <img ref={imagePreviewRef} src={imagePreviewLink} className="max-h-8 max-w-[50px] pr-3" />}
                                                 <label className="form-label mb-0 inline-block border border-gray-600 p-2 py-1.5 cursor-pointer text-emerald-500 hover:bg-[#303030] rounded-sm" htmlFor="avatar">Browse</label>
                                                 <input 
                                                     ref={imageInputRef} 

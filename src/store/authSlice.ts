@@ -47,7 +47,7 @@ export const registerWithEmail = createAsyncThunk( 'auth/registerWithEmail',
     async (userInfo: UserInfo) => {
         const {email, password, imageFile} = userInfo;
         try {
-            let photoURL = await uploadImage(imageFile);  // upload Image
+            let photoURL = await uploadImage(imageFile, "forAvatar");  // upload Image
             const data = await createUserWithEmail(email, password);  // create user
             // set profile image
             try {

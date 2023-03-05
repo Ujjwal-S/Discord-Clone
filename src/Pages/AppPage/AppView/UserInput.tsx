@@ -1,7 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import griningFaceEmojiUrl from "../../../assets/images/appPage/grinning_face_emoji.png";
 import sendMessageIconUrl from "../../../assets/images/appPage/paper-plane.png";
+import { handleImageSelect } from "../../../utils/checkValidImage";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { uploadImage } from "../../../firebase/storage";
 import { db } from "../../../firebase/firebase";
 import { useAppSelector } from "../../../store/hooks";
 import sendToast from "../../../utils/sendToast";
@@ -14,6 +16,9 @@ type UserInputProps = {
 const UserInput = (props: UserInputProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
+    const imagePreviewRef = useRef<HTMLImageElement>(null);
+    const imageInputRef = useRef<HTMLInputElement>(null);
+    const [imagePreviewLink, setImagePreviewLink] = useState("")
     const {activeScreen, activeChat, activeChannel} = useAppSelector(state => state.appState)
     const me = useAppSelector(state => state.userAuth.user)
 
@@ -43,7 +48,23 @@ const UserInput = (props: UserInputProps) => {
         }
     }
 
-    function submitHandler(e:any) {
+    const clearImageInput = () => {
+        if (imageInputRef) {
+            imageInputRef.current!.value = "";
+            setImagePreviewLink("");
+        }
+    }
+
+    async function handleFileSelect(e:React.ChangeEvent<HTMLInputElement>) {
+        try {
+            const data = await handleImageSelect(e);
+            setImagePreviewLink(data)
+        } catch (e) {
+            clearImageInput();
+        }
+    }
+
+    async function submitHandler(e:any) {
         e.preventDefault();
         if (!textareaRef.current?.value) return;
 
@@ -52,17 +73,27 @@ const UserInput = (props: UserInputProps) => {
             combinedId = activeChat.combinedId
             ref = collection(db, `directMessages/${combinedId}/chats/`)
         }
-        if (!ref || !combinedId || !me) return;
+        if (!ref || !combinedId || !me || !formRef.current) return;
 
         try {
-            addDoc(ref, {
+            const formData = new FormData(formRef.current)
+            const message = formData.get("user_input_message") as string
+            let sendMessageObj:any = {
                 senderUid: me.uid,
                 senderEmail: me.email,
                 senderPhotoURL: me.photoURL,
                 createdAt: serverTimestamp(),
-                message: textareaRef.current.value
-            })
+                message
+            }
+            if (imagePreviewLink) {
+                const image = formData.get("imageInp") as File
+                const imageURL = await uploadImage(image, "forMessage")
+                sendMessageObj["imageURL"] = imageURL
+            }
+
+            addDoc(ref, sendMessageObj)
             textareaRef.current.value = ''
+            clearImageInput()
         } catch (e) {
             console.log(e)
             sendToast("error", "Sending message failed :(")
@@ -79,11 +110,22 @@ const UserInput = (props: UserInputProps) => {
         <form ref={formRef} onSubmit={(e) => submitHandler(e)}
         >   
         <fieldset className="flex mx-4 mb-6 mt-2 bg-chat-input-bg" disabled={activeChat ? false : true}>
-            <div className="h-11 py-2.5 px-4 group cursor-pointer">
-                <svg className="text-app-icon-inactive group-hover:text-interactive-hover h-6 w-6" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z">
-                    </path>
-                </svg>
+            <div className="h-11 py-2.5 px-4 group cursor-pointer flex" >
+                <label htmlFor="imageInp">
+                    <svg className="text-app-icon-inactive group-hover:text-interactive-hover h-6 w-6 cursor-pointer" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z">
+                        </path>
+                    </svg>
+                </label>
+                <input 
+                    ref={imageInputRef} 
+                    type="file" 
+                    className="hidden" 
+                    name="imageInp" id="imageInp" multiple={false} 
+                    accept="image/*" 
+                    onChange={handleFileSelect}
+                />
+                <img ref={imagePreviewRef} src={imagePreviewLink} className={`max-h-8 max-w-[50px] pl-3 ${imagePreviewLink ? '' : 'hidden'}`} alt="Image Preview" />
             </div>
             <div className="grow">
                 <textarea 
@@ -101,7 +143,9 @@ const UserInput = (props: UserInputProps) => {
             <div className="flex items-start">
 
                 <div className="h-11 py-2.5 px-4 group cursor-pointer">
-                    <img src={sendMessageIconUrl} className="select-none relative top-0.5 group-hover:brightness-125 max-h-[23px] min-h-[23px] min-w-[23px]" draggable="false" alt="send messages" />
+                    <button type="submit">
+                        <img src={sendMessageIconUrl} className="select-none relative top-0.5 group-hover:brightness-125 max-h-[23px] min-h-[23px] min-w-[23px]" draggable="false" alt="send messages" />
+                    </button>
                 </div>
 
                 <div className="h-11 py-2.5 px-4 group cursor-pointer">
