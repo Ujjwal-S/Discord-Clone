@@ -1,36 +1,29 @@
 import {useState, useRef, ChangeEvent} from "react";
-import validateImage from "../../../utils/checkValidImage";
+import { handleImageSelect } from "../../../utils/checkValidImage";
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
 import sendToast from "../../../utils/sendToast";
 
 const CreateNewServer = (props: {onClose: () => void}) => {
-    const [imageValid, setImageValid] = useState(false)
+    const [imagePreviewLink, setImagePreviewLink] = useState("")
 
     const imagePreviewRef = useRef<HTMLImageElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
 
+    const clearImageInput = () => {
+        if (imageInputRef) {
+            imageInputRef.current!.value = "";
+            setImagePreviewLink("")
+        }
+    }
+
     const handleFileSelect = async (event:ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            const file = event.target.files[0];
-            const valid = await validateImage(file);
-            if (valid) {
-                const fileReader = new FileReader();
-                fileReader.readAsDataURL(file)
-                fileReader.onload = function (ev) {
-                    // @ts-ignore
-                    imagePreviewRef.current?.setAttribute("src", ev.target.result)
-                }
-                setImageValid(true);
-            }
-            else {
-                if (imageInputRef) {
-                    imageInputRef.current!.value = "";  // ! <- non-null assertion (error was, 'imageInputRef.current' is possibly 'null')
-                }
-                sendToast("error", 
-                "We only accept PNG or JPEG files as Avatar images. It's possible that your file has a false (even if it says .png or .jpg) OR incorrect extension name.")
-                setImageValid(false);
-            }
+        try{
+            const data = await handleImageSelect(event)
+            setImagePreviewLink(data)
+        }catch (e) {
+            clearImageInput()
+            console.log("Error uploading image...", e)
         }
     }
 
@@ -44,7 +37,7 @@ const CreateNewServer = (props: {onClose: () => void}) => {
                 <div className="flex w-full justify-between items-end my-4">
                     <label className="uppercase mb-2 inline-block text-xs font-bold tracking-wide">Choose Server Image <span className="text-red-400">*</span></label>
                     <div className="flex">
-                        {imageValid && <img ref={imagePreviewRef} className="max-h-8 max-w-[50px] pr-3" />}
+                        {imagePreviewLink && <img ref={imagePreviewRef} src={imagePreviewLink} className="max-h-8 max-w-[50px] pr-3" />}
                         <label className="uppercase inline-block text-xs font-bold tracking-wide border border-gray-600 p-2 py-1.5 cursor-pointer text-emerald-500 hover:bg-[#303030] rounded-sm" htmlFor="new-server-image">Browse</label>
                         <input ref={imageInputRef} type="file" onChange={handleFileSelect} className="hidden" name="new-server-image" id="new-server-image" multiple={false} accept="image/*"/>
                     </div>

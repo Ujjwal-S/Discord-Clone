@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import bgImageUrl from "../assets/images/loginRegisterPage/bg.svg";
 import googleIcon from "../assets/images/loginRegisterPage/googleIcon.svg";
 import loader from "../assets/images/loginRegisterPage/loader.svg"
-import  validateImageType, { imageWithinSizeLimit } from "../utils/checkValidImage";
 import validateEmail from "../utils/checkValidEmail";
 import { handleImageSelect } from "../utils/checkValidImage";
 import sendToast from "../utils/sendToast";
