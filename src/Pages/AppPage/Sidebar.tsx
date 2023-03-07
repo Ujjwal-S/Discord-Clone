@@ -14,11 +14,11 @@ const Sidebar = (props: {createNewServer: () => void}) => {
             <div className="h-[2px] w-8 rounded-sm bg-[#4f545c7a] mx-auto">
             </div>
 
-            <SidebarIcon directMessages={false} utilButton={false} tooltipText="Fireship">
-                <img className="select-none" src="https://cdn.discordapp.com/icons/1015095797689360444/af578001e4a166fd6181c3757b71ff39.webp?size=96" alt="Fireship" draggable="false"  />
+            <SidebarIcon directMessages={false} utilButton={false} tooltipText="Server 1">
+                <img className="select-none" src="https://www.clipartmax.com/png/middle/307-3072101_probably-the-potential-discord-server-icon-icon.png" alt="Server 1" draggable="false"  />
             </SidebarIcon>
-            <SidebarIcon directMessages={false} utilButton={false} tooltipText="Scalar">
-                <img className="select-none" src="https://cdn.discordapp.com/icons/780066247601291285/a_298ffe3954da9da947bd636b15ca3b53.webp?size=96" alt="Scalar" draggable="false" />
+            <SidebarIcon directMessages={false} utilButton={false} tooltipText="Server 2">
+                <img className="select-none" src="https://cdn.logojoy.com/wp-content/uploads/20210422102212/Among-Us.png" alt="Server 2" draggable="false" />
             </SidebarIcon>
 
 

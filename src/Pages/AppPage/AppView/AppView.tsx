@@ -149,8 +149,13 @@ const AppView = () => {
             {(screenSize < 780) && <SmallScreenSizeWarning />}
             <AppHeader directMessage={true} screenSize={screenSize}/>
             <div className="grow overflow-auto scrollable">
-                <button onClick={getPrevMessages} className="bg-blue-600 text-white">Load Prev</button>
-                {/* Render Message here */}
+                { activeChat &&
+                    <div className="flex justify-center">
+                        <button onClick={getPrevMessages} className="bg-[var(--rang-brand)] text-white px-2 py-1 rounded mt-2">
+                            Load Prev
+                        </button>
+                    </div>
+                }
                 {messages.map(message => 
                     <Message
                         key={message.id}
