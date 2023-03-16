@@ -14,6 +14,7 @@ const appSlice = createSlice({
         updateAppState(state, action: PayloadAction<AppState>) {
             state.activeScreen = action.payload.activeScreen
             state.activeChat = action.payload.activeChat
+            state.activeChannel = action.payload.activeChannel
         }
     }   
 })

@@ -31,8 +31,12 @@ const friendsWithSlice = createSlice({
             state.friendsWith.sort((a, b) => {
                 return new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
             })
+        },
+        clearFriendsList: (state, action) => {
+            console.log("Camere here")
+            state.friendsWith = []
         }
     }
 })
-export const {updateFriendsList, updateLastMessage} = friendsWithSlice.actions
+export const {updateFriendsList, updateLastMessage, clearFriendsList} = friendsWithSlice.actions
 export default friendsWithSlice.reducer

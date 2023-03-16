@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import Button from "../../../components/Button";
-import { useAppSelector } from "../../../store/hooks";
+import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 import { auth } from "../../../firebase/firebase";
 import { signOut } from "firebase/auth";
+import { clearFriendsList } from "../../../store/friendsWithSlice";
+import { updateAppState } from "../../../store/appSlice";
 import sendToast from "../../../utils/sendToast";
 
 const BottomControlPanel = () => {
@@ -10,6 +12,7 @@ const BottomControlPanel = () => {
     const [showLogout, setShowLogout] = useState(false)
     const logoutRef = useRef<HTMLDivElement>(null);
     const userInfoRef = useRef<HTMLDivElement>(null);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         function clickOutsideHandler(e:any) {
@@ -28,6 +31,12 @@ const BottomControlPanel = () => {
     const logoutHandler = () => {
         signOut(auth)
         .then(() => {
+            dispatch(clearFriendsList({}));
+            dispatch(updateAppState({
+                activeScreen: "directMessages",
+                activeChat: null,
+                activeChannel: null
+            }))
             sendToast("success", "See you soon!")
         })
         .catch(err => {
