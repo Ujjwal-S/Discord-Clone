@@ -1,26 +1,90 @@
+import { doc, onSnapshot } from "firebase/firestore";
+import { useEffect } from "react";
 import directMessagesDiscordLogo from "../../assets/images/appPage/direct_messages_discord_logo.svg";
+import { db } from "../../firebase/firebase";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { updateServersList } from "../../store/serversSlice";
+import { updateAppState } from "../../store/appSlice";
+import { ServerChat } from "../../store/types";
+import sendToast from "../../utils/sendToast";
 import SidebarIcon from "./components/SidebarIcon";
 
 const Sidebar = (props: {createNewServer: () => void}) => {
-    
+    const me = useAppSelector(state => state.userAuth.user)
+    const servers = useAppSelector(state => state.serversJoined.servers)
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (!me) return;
+        let unsub:any = null;
+
+        (async () => {
+            const ref = doc(db, "serversJoined", me.uid)
+            try {
+                unsub = onSnapshot(ref, (querySnapshot) => {
+                    let arr:ServerChat[] = [];
+                    querySnapshot.data()?.servers.forEach((server:any) => {
+                        arr.push({
+                            serverId: server.serverId,
+                            serverName: server.serverName,
+                            serverPhotoURL: server.serverPhotoURL,
+                            channelId: null,
+                            channelName: null,
+                        })
+                    })
+                    if (arr.length > 0) dispatch(updateServersList(arr))
+                })
+            }catch (e) {
+                sendToast("error", "Failed to load your servers :(")
+            }
+        })() 
+
+        return () => {
+            unsub && unsub()
+        }
+    }, [])
+
+    const serverIconClickHandler = (serverId:string, serverName:string, serverPhotoURL:string) => {
+        dispatch(updateAppState({
+            activeScreen: "server",
+            activeChat: null,
+            activeServer: {
+                serverId,
+                serverName,
+                serverPhotoURL,
+                channelId:null,
+                channelName: null
+            }
+        }))
+    }
+    const openDMs = () => {
+        dispatch(updateAppState({
+            activeScreen: "directMessages",
+            activeServer: "directMessages",
+            activeChat: null
+        }))
+    }
 
     return (
         <nav className="bg-background-tertiary min-w-[72px]">
             {/* Direct Messages */}
-            <SidebarIcon directMessages={true} utilButton={false} tooltipText="Direct Messages">
+            <SidebarIcon onClick={openDMs} directMessages={true} utilButton={false} tooltipText="Direct Messages">
                 <img src={directMessagesDiscordLogo} draggable={false} className="select-none" alt="direct messages" />
             </SidebarIcon>
             
-            <div className="h-[2px] w-8 rounded-sm bg-[#4f545c7a] mx-auto">
-            </div>
+            <div className="h-[2px] w-8 rounded-sm bg-[#4f545c7a] mx-auto"></div>
 
-            <SidebarIcon directMessages={false} utilButton={false} tooltipText="Server 1">
-                <img className="select-none" src="https://www.clipartmax.com/png/middle/307-3072101_probably-the-potential-discord-server-icon-icon.png" alt="Server 1" draggable="false"  />
-            </SidebarIcon>
-            <SidebarIcon directMessages={false} utilButton={false} tooltipText="Server 2">
-                <img className="select-none" src="https://cdn.logojoy.com/wp-content/uploads/20210422102212/Among-Us.png" alt="Server 2" draggable="false" />
-            </SidebarIcon>
-
+            {/* Servers */}
+            {servers.map(server => {
+                return (
+                <SidebarIcon 
+                    onClick={() => serverIconClickHandler(server.serverId, server.serverName, server.serverPhotoURL)} 
+                    directMessages={false} utilButton={false} 
+                    tooltipText={server.serverName} key={server.serverId}
+                >
+                    <img src={server.serverPhotoURL} alt={server.serverName} />
+                </SidebarIcon>)
+            })}
 
             {/* Util Buttons */}
             <SidebarIcon onClick={props.createNewServer} directMessages={false} utilButton={true} tooltipText="Add a Server">
@@ -36,8 +100,7 @@ const Sidebar = (props: {createNewServer: () => void}) => {
                 </svg>
             </SidebarIcon>
 
-            <div className="h-[2px] w-8 rounded-sm bg-[#4f545c7a] mx-auto">
-            </div>
+            <div className="h-[2px] w-8 rounded-sm bg-[#4f545c7a] mx-auto"></div>
 
             <SidebarIcon directMessages={false} utilButton={true} tooltipText="Download Discord App">
                 <svg className="text-status-green group-hover:text-white" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24">

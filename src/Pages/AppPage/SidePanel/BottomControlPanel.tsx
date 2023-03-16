@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 import { auth } from "../../../firebase/firebase";
 import { signOut } from "firebase/auth";
 import { clearFriendsList } from "../../../store/friendsWithSlice";
+import { clearServersList } from "../../../store/serversSlice";
 import { updateAppState } from "../../../store/appSlice";
 import sendToast from "../../../utils/sendToast";
 
@@ -35,8 +36,9 @@ const BottomControlPanel = () => {
             dispatch(updateAppState({
                 activeScreen: "directMessages",
                 activeChat: null,
-                activeChannel: null
+                activeServer: "directMessages"
             }))
+            dispatch(clearServersList({}))
             sendToast("success", "See you soon!")
         })
         .catch(err => {

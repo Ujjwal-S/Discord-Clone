@@ -13,7 +13,7 @@ type AppHeaderProps = {
 
 const AppHeader = (props: AppHeaderProps) => {
     const ref = useRef<HTMLInputElement>(null)
-    const {activeScreen, activeChat} = useAppSelector(state => state.appState)
+    const {activeScreen, activeChat, activeServer} = useAppSelector(state => state.appState)
 
     useEffect(() => {
         function clickOutsideHandler(e:any) {
@@ -50,12 +50,19 @@ const AppHeader = (props: AppHeaderProps) => {
                     {
                         activeScreen === "directMessages"
                         && // @ts-ignore
-                        <div className="mr-2 text-[#f1f1f1] font-bold relative top-[1px] select-none">{activeChat !== null ? activeChat.friendEmail : 'Direct Messages'}</div>
+                        <div className="mr-2 text-[#f1f1f1] font-bold relative top-[1px] select-none max-h-9 overflow-hidden">{activeChat !== null ? activeChat.friendEmail : 'Direct Messages'}</div>
                     }
                     {
                         activeScreen === "server"
                         && // @ts-ignore
-                        <div className="mr-2 text-[#f1f1f1] font-bold relative top-[1px] select-none">{activeChat.channelName !== null ? activeChat.channelName : activeChat.serverName}</div>
+                        <div className="mr-2 text-[#f1f1f1] font-bold relative top-[1px] select-none max-h-9 overflow-hidden">
+                            { activeServer !== "directMessages" 
+                                ? activeServer.channelName !== null
+                                    ? activeServer.channelName
+                                    : activeServer.serverName
+                                : '' 
+                            }
+                        </div>
                     }
                     <img src={onlineStatusIconUrl} className="inline-block mr-2 select-none" draggable="false" alt="status" />
                 </div>

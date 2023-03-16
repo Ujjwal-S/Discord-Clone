@@ -19,7 +19,7 @@ const UserInput = (props: UserInputProps) => {
     const imagePreviewRef = useRef<HTMLImageElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const [imagePreviewLink, setImagePreviewLink] = useState("")
-    const {activeScreen, activeChat, activeChannel} = useAppSelector(state => state.appState)
+    const {activeScreen, activeChat, activeServer} = useAppSelector(state => state.appState)
     const me = useAppSelector(state => state.userAuth.user)
 
     const onChangeHandler = function(e: any) {
@@ -102,8 +102,11 @@ const UserInput = (props: UserInputProps) => {
 
     const getActiveChat = () => {
         if (activeChat) return activeChat.friendEmail
-        if (activeChannel && activeChannel.channelName) return activeChannel.channelName
-        return activeChannel?.serverName || ""
+        if (activeServer !== "directMessages") {
+            if (activeServer.channelName) return activeServer.channelName
+            return activeServer.serverName
+        }
+        return "";
     }
 
     return (

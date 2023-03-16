@@ -12,7 +12,21 @@ const friendsWithSlice = createSlice({
     initialState,
     reducers: {
         updateFriendsList: (state, action: PayloadAction<DMFriendChat[]>) => {
-            state.friendsWith = state.friendsWith.concat(action.payload)
+            let newUniqueFriends:DMFriendChat[] = [];
+            action.payload.forEach(friend => {
+                let friendExists = false;
+                for (let i = 0; i < state.friendsWith.length; ++i) {
+                    if (state.friendsWith[i].friendUid === friend.friendUid) {
+                        friendExists = true;
+                        break;
+                    }
+                }
+                if (!friendExists) {
+                    newUniqueFriends.push(friend);
+                }
+            })
+
+            state.friendsWith = state.friendsWith.concat(newUniqueFriends)
             // sort in descending order
             state.friendsWith.sort((a, b) => {
                 return new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()

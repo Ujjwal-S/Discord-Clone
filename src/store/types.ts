@@ -23,9 +23,10 @@ export type AuthState = {
 
 // appSlice
 
-type ServerChat = {
+export type ServerChat = {
     serverId: string,
     serverName: string,
+    serverPhotoURL: string,
     channelId: string | null
     channelName: string | null
 }
@@ -45,7 +46,7 @@ export type ActiveScreen = "directMessages" | "server"
 export type AppState = {
     activeScreen: ActiveScreen
     activeChat: DMFriendChat | null
-    activeChannel: ServerChat | null
+    activeServer: ServerChat | "directMessages"
 }
 
 

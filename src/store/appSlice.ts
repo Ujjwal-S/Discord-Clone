@@ -4,7 +4,7 @@ import { AppState } from "./types";
 const initialState: AppState = {
     activeScreen: "directMessages",
     activeChat: null,
-    activeChannel: null,
+    activeServer: "directMessages",
 }
 
 const appSlice = createSlice({
@@ -14,7 +14,7 @@ const appSlice = createSlice({
         updateAppState(state, action: PayloadAction<AppState>) {
             state.activeScreen = action.payload.activeScreen
             state.activeChat = action.payload.activeChat
-            state.activeChannel = action.payload.activeChannel
+            state.activeServer = action.payload.activeServer
         }
     }   
 })

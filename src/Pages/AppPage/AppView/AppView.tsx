@@ -31,7 +31,7 @@ const pageSize = 6;
 
 const AppView = () => {
     const [screenSize, setScreenSize] = useState(window.innerWidth);
-    const { activeChat, activeChannel} = useAppSelector(state => state.appState)
+    const { activeChat } = useAppSelector(state => state.appState)
     const [messages, setMessages] = useState<MessageType[]>([]);
 
     const resizeHandler = useCallback(

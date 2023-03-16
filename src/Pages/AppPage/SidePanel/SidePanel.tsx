@@ -1,5 +1,5 @@
 import SidePanelDMs from "./SidePanelDMs";
-import SidePanelChannel from "./SidePanelChannel";
+import SidePanelChannels from "./SidePanelChannels";
 import BottomControlPanel from "./BottomControlPanel";
 import SidePanelHeader from "./SidePanelHeader";
 import { useAppSelector } from "../../../store/hooks";
@@ -13,7 +13,7 @@ const SidePanel = (props: {createNewChannel: () => void}) => {
             <ul className="scrollable grow hover:overflow-y-auto hover:overflow-x-hidden overflow-hidden border-t border-t-background-tertiary">
                 {activeScreen === "directMessages"
                     ?   <SidePanelDMs />
-                    :   <SidePanelChannel />
+                    :   <SidePanelChannels />
                 }
             </ul>
             <BottomControlPanel />

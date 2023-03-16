@@ -53,7 +53,7 @@ const SidePanelDM = (props: {friend:DMFriendChat}) => {
         dispatch(updateAppState({
             activeScreen: "directMessages",
             activeChat: thisChat,
-            activeChannel: null
+            activeServer: "directMessages"
         }))
     }
 
