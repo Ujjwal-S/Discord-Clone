@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import griningFaceEmojiUrl from "../../../assets/images/appPage/grinning_face_emoji.png";
 import sendMessageIconUrl from "../../../assets/images/appPage/paper-plane.png";
 import { handleImageSelect } from "../../../utils/checkValidImage";
@@ -22,11 +22,9 @@ const UserInput = (props: UserInputProps) => {
     const {activeScreen, activeChat, activeServer} = useAppSelector(state => state.appState)
     const me = useAppSelector(state => state.userAuth.user)
 
-    const onChangeHandler = function(e: any) {
-        const target = e.target as HTMLTextAreaElement;
-
+    const onChangeHandler = function(target: any) {
         if(textareaRef.current) {
-            e.target.style.height = 'inherit';
+            target.style.height = 'inherit';
             if (target.scrollHeight > 100) {
                 textareaRef.current.style.overflowY = "scroll"
             }
@@ -67,17 +65,24 @@ const UserInput = (props: UserInputProps) => {
     async function submitHandler(e:any) {
         e.preventDefault();
         if (!textareaRef.current?.value) return;
-
+        
         let ref = null, combinedId = "";
         if (activeChat && activeChat.combinedId){
             combinedId = activeChat.combinedId
             ref = collection(db, `directMessages/${combinedId}/chats/`)
         }
+        if (activeServer !== "directMessages" && activeServer.serverId) {
+            if (activeServer.channelId) {
+                combinedId = activeServer.serverId + activeServer.channelId
+                ref = collection(db, `servers/${activeServer.serverId}/channels/${activeServer.channelId}/chats/`)
+            }
+        }
         if (!ref || !combinedId || !me || !formRef.current) return;
-
+        
         try {
             const formData = new FormData(formRef.current)
             const message = formData.get("user_input_message") as string
+
             let sendMessageObj:any = {
                 senderUid: me.uid,
                 senderEmail: me.email,
@@ -90,12 +95,15 @@ const UserInput = (props: UserInputProps) => {
                 const imageURL = await uploadImage(image, "forMessage")
                 sendMessageObj["imageURL"] = imageURL
             }
-
+            
             addDoc(ref, sendMessageObj)
+
             textareaRef.current.value = ''
+            onChangeHandler(textareaRef.current)
             clearImageInput()
-        } catch (e) {
-            console.log(e)
+
+        } catch (err) {
+            console.log(err)
             sendToast("error", "Sending message failed :(")
         }
     }
@@ -110,9 +118,11 @@ const UserInput = (props: UserInputProps) => {
     }
 
     return (
-        <form ref={formRef} onSubmit={(e) => submitHandler(e)}
+        <form ref={formRef} onSubmit={submitHandler}
         >   
-        <fieldset className="flex mx-4 mb-6 mt-2 bg-chat-input-bg" disabled={activeChat ? false : true}>
+        <fieldset className="flex mx-4 mb-6 mt-2 bg-chat-input-bg" disabled={
+            (activeChat || (activeServer !== "directMessages" && activeServer?.channelId)) ? false : true
+        }>
             <div className="h-11 py-2.5 px-4 group cursor-pointer flex" >
                 <label htmlFor="imageInp">
                     <svg className="text-app-icon-inactive group-hover:text-interactive-hover h-6 w-6 cursor-pointer" width="24" height="24" viewBox="0 0 24 24">
@@ -135,7 +145,7 @@ const UserInput = (props: UserInputProps) => {
                     ref={textareaRef} 
                     name="user_input_message" 
                     id="user_input_message" 
-                    onChange={(e) => onChangeHandler(e)} 
+                    onChange={(e) => onChangeHandler(e.target)} 
                     onKeyDown={checkEnterKey}
                     rows={1}
                     className="p-2 h-8.5 w-full resize-none max-h-[100px] mt-[5px] bg-chat-input-bg text-white outline-none scrollable overflow-x-hidden"

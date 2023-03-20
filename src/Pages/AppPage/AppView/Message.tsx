@@ -14,14 +14,14 @@ const Message = (props: MessageType) => {
 
     return (
         <div className="flex px-4 py-3 hover:bg-chat-hover-bg mt-1">
-            <div className="h-8 w-8 mr-3">
+            <div className="h-8 min-w-[2rem] mr-3">
                 <img
                     className="h-8 rounded-full select-none cursor-pointer" draggable={false}
                     src={props.senderPhotoURL}
                     alt="user profile picture" 
                 />
             </div>
-            <div>
+            <div className="max-w-full break-all">
                 {/* Message Info */}
                 <div className="mb-1">
                     <span className="text-chat-username-color text-sm cursor-pointer font-medium mr-2">
