@@ -92,7 +92,7 @@ export const getDataFromCache = (combinedId:string, pageSize: number, pageNumber
                 const combinedIdCreatedAtIndex = chatStore.index("combinedId_and_createdAt")
 
                 const lowerBound = [combinedId, 0]
-                const upperBound = [combinedId, lastMessageTime]
+                const upperBound = [combinedId, lastMessageTime-1,]
                 const range = IDBKeyRange.bound(lowerBound, upperBound)
 
                 let arr:MessageType[] = []

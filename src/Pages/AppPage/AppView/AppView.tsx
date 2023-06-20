@@ -69,6 +69,7 @@ const AppView = () => {
 
         (async function () {
             try{
+                setMessages([])
                 let cachedMessages = await getDataFromCache(combinedId, pageSize, 1);           
                 if (cachedMessages.length === 0) {
                     const q = query(ref, orderBy("createdAt"), limitToLast(6));
