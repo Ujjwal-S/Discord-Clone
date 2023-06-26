@@ -23,8 +23,7 @@ Discord Clone is blazing fast, as it uses IndexedDB for caching messages locally
 
 <h3 align="center">🙌 Welcome 🙌</h3>
 
-![Welcome Screen](https://github.com/Ujjwal-S/Discord-Clone/assets/53434192/c9ab9076-5b5c-4440-ab09-ed0d0cff5592)
-
+![Capture](https://github.com/Ujjwal-S/Discord-Clone/assets/53434192/19e31295-11f2-493f-84e5-7b0b6d84cd6e)
 
 <h3 align="center">Login In To your Conversations 🔑</h3>
 
