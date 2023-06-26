@@ -21,16 +21,27 @@ Discord Clone is blazing fast, as it uses IndexedDB for caching messages locally
 
 * **`Public Servers (Communities)`**: You can join public servers on Discord Clone, where you can chat with other users who share your interests. 
 
+<h3 align="center">🙌 Welcome 🙌</h3>
+
+![Welcome Screen](https://github.com/Ujjwal-S/Discord-Clone/assets/53434192/c9ab9076-5b5c-4440-ab09-ed0d0cff5592)
+
+
 <h3 align="center">Login In To your Conversations 🔑</h3>
-<img src="https://user-images.githubusercontent.com/53434192/226424631-e77510fe-ea77-400a-83ae-cf2a79459f82.png" />
+
+![Capture](https://github.com/Ujjwal-S/Discord-Clone/assets/53434192/12ca81d1-e227-4dbc-b474-bd8916efdd87)
+
 <hr>
 
 <h3 align="center">Join Communites of your interest 🙌</h3>
-<img src="https://user-images.githubusercontent.com/53434192/226425027-cc2493ba-eb95-46a3-8939-4b58e49f71fa.png" />
+
+![2](https://github.com/Ujjwal-S/Discord-Clone/assets/53434192/d1d8bf15-0f5e-455f-993c-f80a02ecfc5c)
+
 <hr>
 
 <h3 align="center">DM with you friends ✌️</h3>
-<video src="https://user-images.githubusercontent.com/53434192/226425755-6a89fcf8-6eda-42c6-bb51-180dceb7479d.webm" />
+
+[Demo.webm](https://github.com/Ujjwal-S/Discord-Clone/assets/53434192/fe2e80d9-9dcb-4513-8b56-73bb95ce9451)
+
 
 <hr>
 
