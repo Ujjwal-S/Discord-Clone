@@ -26,6 +26,8 @@ module.exports = {
         'chat-message-timestamp': '#72767d',
         'chat-username-color': '#f1f1f1',
         'chat-message-color': '#dcddde',
+        'message-other': '#1e1f28',
+				'message-mine': '#5765f2',
       },
       boxShadow: {
         'semi': '0 8px 15px rgba(0,0,0,.2)',

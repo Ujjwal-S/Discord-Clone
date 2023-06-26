@@ -43,6 +43,11 @@
   .input-box {
     @apply w-full h-10 p-[10px] border-none rounded-sm outline-none text-white bg-[color:#202225]
   }
+
+  .emoji-picker {
+    @apply absolute bottom-12 right-0 transition-all duration-200 scale-0
+    origin-bottom-right select-none z-50
+  }
 }
 
 

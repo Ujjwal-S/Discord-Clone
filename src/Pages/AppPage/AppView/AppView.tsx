@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import AppHeader from "./AppHeader";
 import Message, { MessageType } from "./Message";
 import SmallScreenSizeWarning from "./SmallScreenSizeWarning";
@@ -120,7 +120,8 @@ const AppView = () => {
         }
     }, [activeChat, activeServer])
 
-async function getPrevMessages() {
+
+    async function getPrevMessages() {
    
         let ref = null, combinedId = "";
 
@@ -156,6 +157,7 @@ async function getPrevMessages() {
                 
                 arr.length && await addDataToCacheStore(arr);
                 cachedMessages = arr;
+
             }
             setMessages(val => {
                 return [...cachedMessages, ...val]
@@ -170,11 +172,15 @@ async function getPrevMessages() {
         <div className="w-full h-full overflow-y-auto flex flex-col">
             {(screenSize < 780) && <SmallScreenSizeWarning />}
             <AppHeader directMessage={true} screenSize={screenSize}/>
-            <div className="grow overflow-y-auto scrollable">
+            <div className="grow overflow-y-auto scrollable px-4">
                 { (activeChat || (activeServer !== "directMessages" && activeServer.channelId)) &&
                     <div className="flex justify-center">
-                        <button onClick={getPrevMessages} className="bg-[var(--rang-brand)] text-white px-2 py-1 rounded mt-2">
-                            Load Prev
+                        <button onClick={getPrevMessages} 
+                            className="px-5 mt-2 hover:cursor-pointer"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="cyan" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                            </svg>
                         </button>
                     </div>
                 }

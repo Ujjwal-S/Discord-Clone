@@ -1,3 +1,5 @@
+import { useAppSelector } from "../../../store/hooks"
+
 export type MessageType = {
     id: string,
     combinedId: string,
@@ -11,7 +13,7 @@ export type MessageType = {
 }
 
 const Message = (props: MessageType) => {
-
+    
     return (
         <div className="flex px-4 py-3 hover:bg-chat-hover-bg mt-1">
             <div className="h-8 min-w-[2rem] mr-3">
@@ -21,7 +23,7 @@ const Message = (props: MessageType) => {
                     alt="user profile picture" 
                 />
             </div>
-            <div className="max-w-full break-all">
+            <div className="max-w-[70%] break-words">
                 {/* Message Info */}
                 <div className="mb-1">
                     <span className="text-chat-username-color text-sm cursor-pointer font-medium mr-2">
